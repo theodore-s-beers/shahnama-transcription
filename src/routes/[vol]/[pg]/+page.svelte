@@ -36,7 +36,7 @@
 	let showTranscription = false;
 
 	function handleKeydown(e: KeyboardEvent) {
-		if (e.key === '/' && lineCountConfirmed) {
+		if (e.key === '\\' && lineCountConfirmed) {
 			showTranscription = !showTranscription;
 		}
 	}
@@ -119,25 +119,26 @@
 
 	{#if lineCountConfirmed}
 		<div class="mb-6">
-			<em
-				>Use the <strong>/</strong> key to switch between viewing the page image and the transcription.</em
-			>
+			<em>Use the</em> <strong>\</strong>
+			<em>key to switch between viewing the page image and the transcription.</em>
 		</div>
 	{/if}
 
 	<div class="mb-6 flex items-center">
-		<label for="lines-count" class="w-16 font-semibold">Lines</label><input
+		<label for="lines-count" class="w-16 font-semibold">Lines</label>
+		<input
 			name="lines-count"
 			type="number"
 			bind:value={lineCount}
 			min="0"
 			max="25"
-			class="mr-4 rounded border border-black p-2 invalid:bg-red-100 disabled:bg-green-100"
+			class="mr-4 w-16 rounded border border-black p-2 invalid:bg-red-100 disabled:bg-green-100"
 			disabled={lineCountConfirmed}
 			on:keydown={(e) => {
 				if (e.key === 'Enter') confirmLineCount();
 			}}
-		/><button
+		/>
+		<button
 			class="rounded border bg-blue-700 px-3 py-2 text-white"
 			class:bg-gray-600={lineCountConfirmed}
 			on:click={confirmLineCount}
@@ -185,9 +186,10 @@
 							<input
 								name="line-number"
 								type="number"
-								class="rounded border border-black p-2"
-								min="0"
-								max="1000"
+								class="w-20 rounded border border-black p-2 invalid:bg-red-100"
+								min="5"
+								max="995"
+								step="5"
 								dir="ltr"
 								bind:value={line.numberListed}
 							/>

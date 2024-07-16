@@ -20,7 +20,7 @@
 			bind:value={vol}
 			min="1"
 			max="8"
-			class="rounded border border-black p-2 invalid:bg-red-100 disabled:bg-green-100"
+			class="w-14 rounded border border-black p-2 invalid:bg-red-100 disabled:bg-green-100"
 		/>
 	</div>
 
@@ -32,7 +32,7 @@
 			bind:value={pg}
 			min="3"
 			max={maxPages[vol] || 0}
-			class="rounded border border-black p-2 invalid:bg-red-100 disabled:bg-green-100"
+			class="w-20 rounded border border-black p-2 invalid:bg-red-100 disabled:bg-green-100"
 		/>
 	</div>
 
