@@ -13,6 +13,7 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
+		"@auth/core": "^0.34.1",
 		"@auth/sveltekit": "^1.4.1"
 	},
 	"devDependencies": {
