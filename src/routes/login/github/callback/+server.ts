@@ -58,6 +58,10 @@ export async function GET({ cookies, platform, url }) {
 			return new Response(null, { status: 400 }); // Invalid code
 		}
 
+		if (err instanceof TypeError) {
+			return new Response(err.message, { status: 500 });
+		}
+
 		if (err instanceof SyntaxError) {
 			return new Response(rawResponse, { status: 500 });
 		}
