@@ -27,10 +27,10 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		// Replace this with your own DB client.
 		// const existingUser = await db.table('user').where('github_id', '=', githubUser.id).get();
 		const sql = 'SELECT * FROM user WHERE github_id = ?';
-		const stmt = event.platform?.env.AuthDB.prepare(sql).bind(githubUser.id);
+		const stmt = event.platform!.env.AuthDB.prepare(sql).bind(githubUser.id);
 		const existingUser = await stmt.first<UserRow>();
 
-		const lucia = initializeLucia(event.platform?.env.AuthDB);
+		const lucia = initializeLucia(event.platform!.env.AuthDB);
 
 		if (existingUser) {
 			const session = await lucia.createSession(existingUser.id, {});
@@ -49,11 +49,9 @@ export async function GET(event: RequestEvent): Promise<Response> {
 			// 	username: githubUser.login
 			// });
 			const sql = 'INSERT INTO user (id, github_id, username) VALUES (?1, ?2, ?3)';
-			const stmt = event.platform?.env.AuthDB.prepare(sql).bind(
-				userId,
-				githubUser.id,
-				githubUser.login
-			);
+			const stmt = event
+				.platform!.env.AuthDB.prepare(sql)
+				.bind(userId, githubUser.id, githubUser.login);
 			await stmt.run();
 
 			const session = await lucia.createSession(userId, {});

@@ -12,6 +12,7 @@ export function initializeLucia(D1: D1Database) {
 		user: 'user',
 		session: 'session'
 	});
+
 	return new Lucia(adapter, {
 		sessionCookie: {
 			attributes: {
