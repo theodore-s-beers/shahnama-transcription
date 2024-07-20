@@ -75,7 +75,7 @@ export async function GET({ cookies, platform, url }) {
 }
 
 interface GitHubUser {
-	id: number;
+	id: string;
 	login: string;
 }
 
