@@ -1,17 +1,16 @@
 import { redirect } from '@sveltejs/kit';
-import type { Actions, PageServerLoad } from './$types';
 import { generateState } from 'arctic';
 import { github } from '$lib/server/auth';
 
-export const load: PageServerLoad = async (event) => {
-	if (event.locals.user) {
+export const load = async ({ locals }) => {
+	if (locals.user) {
 		return redirect(302, '/');
 	}
 
 	return {};
 };
 
-export const actions: Actions = {
+export const actions = {
 	default: async (event) => {
 		if (event.locals.session) {
 			return redirect(302, '/');

@@ -1,16 +1,15 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { initializeLucia } from '$lib/server/auth';
-import type { Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals }) => {
-	if (!locals.user) redirect(302, '/login');
+export const load = async ({ locals }) => {
+	if (!locals.user) {
+		return redirect(302, '/login');
+	}
 
-	return {
-		username: locals.user.username
-	};
+	return {};
 };
 
-export const actions: Actions = {
+export const actions = {
 	default: async (event) => {
 		if (!event.locals.session) {
 			return fail(401);
@@ -25,6 +24,6 @@ export const actions: Actions = {
 			...sessionCookie.attributes
 		});
 
-		redirect(302, '/login');
+		return redirect(302, '/');
 	}
 };

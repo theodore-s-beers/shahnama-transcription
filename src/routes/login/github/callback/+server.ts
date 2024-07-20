@@ -2,12 +2,10 @@ import { OAuth2RequestError } from 'arctic';
 import { generateIdFromEntropySize } from 'lucia';
 import { github, initializeLucia } from '$lib/server/auth';
 
-import type { RequestEvent } from '@sveltejs/kit';
-
-export async function GET(event: RequestEvent): Promise<Response> {
-	const code = event.url.searchParams.get('code');
-	const state = event.url.searchParams.get('state');
-	const storedState = event.cookies.get('github_oauth_state') ?? null;
+export async function GET({ cookies, platform, url }) {
+	const code = url.searchParams.get('code');
+	const state = url.searchParams.get('state');
+	const storedState = cookies.get('github_oauth_state') ?? null;
 
 	if (!code || !state || !storedState || state !== storedState) {
 		return new Response(null, { status: 400 });
@@ -20,39 +18,29 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		});
 		const githubUser: GitHubUser = await githubUserResponse.json();
 
-		// Replace this with your own DB client.
-		// const existingUser = await db.table('user').where('github_id', '=', githubUser.id).get();
 		const sql = 'SELECT * FROM user WHERE github_id = ?';
-		const stmt = event.platform!.env.AUTH_DB.prepare(sql).bind(githubUser.id);
+		const stmt = platform!.env.AUTH_DB.prepare(sql).bind(githubUser.id);
 		const existingUser = await stmt.first<UserRow>();
 
-		const lucia = initializeLucia(event.platform!.env.AUTH_DB);
+		const lucia = initializeLucia(platform!.env.AUTH_DB);
 
 		if (existingUser) {
 			const session = await lucia.createSession(existingUser.id, {});
 			const sessionCookie = lucia.createSessionCookie(session.id);
-			event.cookies.set(sessionCookie.name, sessionCookie.value, {
+			cookies.set(sessionCookie.name, sessionCookie.value, {
 				path: '.',
 				...sessionCookie.attributes
 			});
 		} else {
 			const userId = generateIdFromEntropySize(10); // 16 characters long
 
-			// Replace this with your own DB client.
-			// await db.table('user').insert({
-			// 	id: userId,
-			// 	github_id: githubUser.id,
-			// 	username: githubUser.login
-			// });
 			const sql = 'INSERT INTO user (id, github_id, username) VALUES (?1, ?2, ?3)';
-			const stmt = event
-				.platform!.env.AUTH_DB.prepare(sql)
-				.bind(userId, githubUser.id, githubUser.login);
+			const stmt = platform!.env.AUTH_DB.prepare(sql).bind(userId, githubUser.id, githubUser.login);
 			await stmt.run();
 
 			const session = await lucia.createSession(userId, {});
 			const sessionCookie = lucia.createSessionCookie(session.id);
-			event.cookies.set(sessionCookie.name, sessionCookie.value, {
+			cookies.set(sessionCookie.name, sessionCookie.value, {
 				path: '.',
 				...sessionCookie.attributes
 			});
@@ -60,16 +48,13 @@ export async function GET(event: RequestEvent): Promise<Response> {
 
 		return new Response(null, {
 			status: 302,
-			headers: {
-				Location: '/'
-			}
+			headers: { Location: '/' }
 		});
-	} catch (e) {
-		// the specific error message depends on the provider
-		if (e instanceof OAuth2RequestError) {
-			// invalid code
-			return new Response(null, { status: 400 });
+	} catch (err) {
+		if (err instanceof OAuth2RequestError) {
+			return new Response(null, { status: 400 }); // Invalid code
 		}
+
 		return new Response('Unspecified error', { status: 500 });
 	}
 }

@@ -11,7 +11,13 @@
 
 <div class="mx-auto max-w-7xl p-4 text-lg">
 	<div class="mb-2 flex justify-end">
-		<div>{data.userId || 'Not logged in'}</div>
+		{#if data.username}
+			<div>
+				Signed in: <a href="/logout" class="text-green-700 hover:underline">{data.username}</a>
+			</div>
+		{:else}
+			<div><a href="/login" class="text-blue-800 hover:underline">Sign in</a></div>
+		{/if}
 	</div>
 
 	<div class="mb-6 text-4xl">Transcribe the <em>Shāhnāma</em></div>
