@@ -10,27 +10,23 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	const storedState = event.cookies.get('github_oauth_state') ?? null;
 
 	if (!code || !state || !storedState || state !== storedState) {
-		return new Response(null, {
-			status: 400
-		});
+		return new Response(null, { status: 400 });
 	}
 
 	try {
 		const tokens = await github.validateAuthorizationCode(code);
 		const githubUserResponse = await fetch('https://api.github.com/user', {
-			headers: {
-				Authorization: `Bearer ${tokens.accessToken}`
-			}
+			headers: { Authorization: `Bearer ${tokens.accessToken}` }
 		});
 		const githubUser: GitHubUser = await githubUserResponse.json();
 
 		// Replace this with your own DB client.
 		// const existingUser = await db.table('user').where('github_id', '=', githubUser.id).get();
 		const sql = 'SELECT * FROM user WHERE github_id = ?';
-		const stmt = event.platform!.env.AuthDB.prepare(sql).bind(githubUser.id);
+		const stmt = event.platform!.env.AUTH_DB.prepare(sql).bind(githubUser.id);
 		const existingUser = await stmt.first<UserRow>();
 
-		const lucia = initializeLucia(event.platform!.env.AuthDB);
+		const lucia = initializeLucia(event.platform!.env.AUTH_DB);
 
 		if (existingUser) {
 			const session = await lucia.createSession(existingUser.id, {});
@@ -50,7 +46,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 			// });
 			const sql = 'INSERT INTO user (id, github_id, username) VALUES (?1, ?2, ?3)';
 			const stmt = event
-				.platform!.env.AuthDB.prepare(sql)
+				.platform!.env.AUTH_DB.prepare(sql)
 				.bind(userId, githubUser.id, githubUser.login);
 			await stmt.run();
 
@@ -61,6 +57,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 				...sessionCookie.attributes
 			});
 		}
+
 		return new Response(null, {
 			status: 302,
 			headers: {

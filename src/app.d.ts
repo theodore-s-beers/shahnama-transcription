@@ -10,7 +10,9 @@ declare global {
 		// interface PageData {}
 		// interface PageState {}
 		interface Platform {
-			env: { AuthDB: D1Database };
+			cf: CfProperties;
+			ctx: ExecutionContext;
+			env: { AUTH_DB: D1Database };
 		}
 	}
 }

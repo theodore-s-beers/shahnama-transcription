@@ -5,12 +5,13 @@
 	"type": "module",
 	"scripts": {
 		"build": "vite build",
+		"cf-typegen": "wrangler types && mv worker-configuration.d.ts src/",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"dev": "vite dev",
 		"format": "prettier --write .",
 		"lint": "prettier --check . && eslint .",
-		"preview": "vite preview"
+		"preview": "npm run build && wrangler pages dev"
 	},
 	"dependencies": {
 		"@lucia-auth/adapter-sqlite": "^3.0.2",
@@ -38,6 +39,7 @@
 		"tslib": "^2.6.3",
 		"typescript": "^5.5.3",
 		"typescript-eslint": "8.0.0-alpha.42",
-		"vite": "^5.3.3"
+		"vite": "^5.3.3",
+		"wrangler": "^3.65.1"
 	}
 }
