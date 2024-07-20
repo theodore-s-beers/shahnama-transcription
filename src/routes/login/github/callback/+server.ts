@@ -11,8 +11,6 @@ export async function GET({ cookies, platform, url }) {
 		return new Response(null, { status: 400 });
 	}
 
-	let rawResponse = '';
-
 	try {
 		const tokens = await github.validateAuthorizationCode(code);
 		const githubUserResponse = await fetch('https://api.github.com/user', {
@@ -21,7 +19,6 @@ export async function GET({ cookies, platform, url }) {
 				'User-Agent': 'Shahnama Transcription Alpha'
 			}
 		});
-		rawResponse = await githubUserResponse.text();
 		const githubUser: GitHubUser = await githubUserResponse.json();
 
 		const sql = 'SELECT * FROM user WHERE github_id = ?';
@@ -59,14 +56,6 @@ export async function GET({ cookies, platform, url }) {
 	} catch (err) {
 		if (err instanceof OAuth2RequestError) {
 			return new Response(null, { status: 400 }); // Invalid code
-		}
-
-		if (err instanceof TypeError) {
-			return new Response(rawResponse, { status: 500 });
-		}
-
-		if (err instanceof SyntaxError) {
-			return new Response(rawResponse, { status: 500 });
 		}
 
 		return new Response(null, { status: 500 });
