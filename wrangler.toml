@@ -2,6 +2,9 @@ name = "shahnama-transcription"
 compatibility_date = "2024-07-18"
 pages_build_output_dir = ".svelte-kit/cloudflare"
 
+[vars]
+NODE_VERSION = "22"
+
 [[d1_databases]]
 binding = "AUTH_DB"
 database_name = "transcription-auth-alpha-2"
