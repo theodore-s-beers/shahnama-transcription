@@ -59,7 +59,7 @@ export async function GET({ cookies, platform, url }) {
 		}
 
 		if (err instanceof TypeError) {
-			return new Response(err.message, { status: 500 });
+			return new Response(rawResponse, { status: 500 });
 		}
 
 		if (err instanceof SyntaxError) {
