@@ -21,7 +21,7 @@ export const actions = {
 
 		event.cookies.set('github_oauth_state', state, {
 			path: '/',
-			secure: import.meta.env.PROD,
+			secure: true,
 			httpOnly: true,
 			maxAge: 60 * 10,
 			sameSite: 'lax'
