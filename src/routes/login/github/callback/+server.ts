@@ -14,10 +14,15 @@ export async function GET({ cookies, platform, url }) {
 	let errorStage = 'Talking to GitHub';
 
 	try {
+		errorStage = 'Validating authorization code';
 		const tokens = await github.validateAuthorizationCode(code);
+
+		errorStage = 'Fetching user info from GitHub API';
 		const githubUserResponse = await fetch('https://api.github.com/user', {
 			headers: { Authorization: `Bearer ${tokens.accessToken}` }
 		});
+
+		errorStage = 'Parsing GitHub user info';
 		const githubUser: GitHubUser = await githubUserResponse.json();
 
 		errorStage = 'Checking DB for existing user';
