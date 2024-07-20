@@ -12,10 +12,6 @@
 		"lint": "prettier --check . && eslint .",
 		"preview": "vite preview"
 	},
-	"dependencies": {
-		"@auth/core": "^0.34.1",
-		"@auth/sveltekit": "^1.4.1"
-	},
 	"devDependencies": {
 		"@sveltejs/adapter-cloudflare": "^4.6.1",
 		"@sveltejs/kit": "^2.5.18",
