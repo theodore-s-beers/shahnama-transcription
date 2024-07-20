@@ -12,7 +12,11 @@
 		"lint": "prettier --check . && eslint .",
 		"preview": "vite preview"
 	},
+	"dependencies": {
+		"@lucia-auth/adapter-sqlite": "^3.0.2"
+	},
 	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20240718.0",
 		"@sveltejs/adapter-cloudflare": "^4.6.1",
 		"@sveltejs/kit": "^2.5.18",
 		"@sveltejs/vite-plugin-svelte": "^3.1.1",
@@ -22,6 +26,7 @@
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.42.0",
 		"globals": "^15.8.0",
+		"lucia": "^3.2.0",
 		"postcss": "^8.4.39",
 		"prettier": "^3.3.3",
 		"prettier-plugin-svelte": "^3.2.5",
