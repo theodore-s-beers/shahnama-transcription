@@ -11,27 +11,19 @@ export async function GET({ cookies, platform, url }) {
 		return new Response(null, { status: 400 });
 	}
 
-	let errorStage = 'Talking to GitHub';
+	let rawResponse = '';
 
 	try {
-		errorStage = 'Validating authorization code';
 		const tokens = await github.validateAuthorizationCode(code);
-
-		errorStage = 'Fetching user info from GitHub API';
 		const githubUserResponse = await fetch('https://api.github.com/user', {
 			headers: { Authorization: `Bearer ${tokens.accessToken}` }
 		});
-
-		errorStage = 'Parsing GitHub user info';
+		rawResponse = await githubUserResponse.text();
 		const githubUser: GitHubUser = await githubUserResponse.json();
-
-		errorStage = 'Checking DB for existing user';
 
 		const sql = 'SELECT * FROM user WHERE github_id = ?';
 		const stmt = platform!.env.AUTH_DB.prepare(sql).bind(githubUser.id);
 		const existingUser = await stmt.first<UserRow>();
-
-		errorStage = 'Initializing Lucia';
 
 		const lucia = initializeLucia(platform!.env.AUTH_DB);
 
@@ -43,11 +35,7 @@ export async function GET({ cookies, platform, url }) {
 				...sessionCookie.attributes
 			});
 		} else {
-			errorStage = 'Creating ID for new user';
-
 			const userId = generateIdFromEntropySize(10); // 16 characters long
-
-			errorStage = 'Adding new user to DB';
 
 			const sql = 'INSERT INTO user (id, github_id, username) VALUES (?1, ?2, ?3)';
 			const stmt = platform!.env.AUTH_DB.prepare(sql).bind(userId, githubUser.id, githubUser.login);
@@ -70,20 +58,16 @@ export async function GET({ cookies, platform, url }) {
 			return new Response(null, { status: 400 }); // Invalid code
 		}
 
-		if (err instanceof TypeError) {
-			return new Response(`Type error: ${errorStage}`, { status: 500 });
-		}
-
 		if (err instanceof SyntaxError) {
-			return new Response(err.message, { status: 500 });
+			return new Response(rawResponse, { status: 500 });
 		}
 
-		return new Response(errorStage, { status: 500 });
+		return new Response(null, { status: 500 });
 	}
 }
 
 interface GitHubUser {
-	id: string;
+	id: number;
 	login: string;
 }
 
