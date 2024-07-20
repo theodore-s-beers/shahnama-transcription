@@ -13,22 +13,21 @@
 		"lint": "prettier --check . && eslint .",
 		"preview": "npm run build && wrangler pages dev"
 	},
-	"dependencies": {
-		"@lucia-auth/adapter-sqlite": "^3.0.2",
-		"arctic": "^1.9.2",
-		"lucia": "^3.2.0"
-	},
+	"dependencies": {},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20240718.0",
+		"@lucia-auth/adapter-sqlite": "^3.0.2",
 		"@sveltejs/adapter-cloudflare": "^4.6.1",
 		"@sveltejs/kit": "^2.5.18",
 		"@sveltejs/vite-plugin-svelte": "^3.1.1",
 		"@types/eslint": "^8.56.10",
+		"arctic": "^1.9.2",
 		"autoprefixer": "^10.4.19",
 		"eslint": "^9.7.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.42.0",
 		"globals": "^15.8.0",
+		"lucia": "^3.2.0",
 		"postcss": "^8.4.39",
 		"prettier": "^3.3.3",
 		"prettier-plugin-svelte": "^3.2.5",

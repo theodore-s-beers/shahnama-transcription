@@ -10,7 +10,7 @@
 </script>
 
 <div class="mx-auto max-w-7xl p-4 text-lg">
-	<div class="mb-2 flex justify-end">
+	<div class="mb-3 flex justify-end">
 		{#if data.username}
 			<div>
 				Signed in: <a href="/logout" class="text-green-700 hover:underline">{data.username}</a>

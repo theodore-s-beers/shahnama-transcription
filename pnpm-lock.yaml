@@ -7,20 +7,13 @@ settings:
 importers:
 
   .:
-    dependencies:
-      '@lucia-auth/adapter-sqlite':
-        specifier: ^3.0.2
-        version: 3.0.2(lucia@3.2.0)
-      arctic:
-        specifier: ^1.9.2
-        version: 1.9.2
-      lucia:
-        specifier: ^3.2.0
-        version: 3.2.0
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20240718.0
         version: 4.20240718.0
+      '@lucia-auth/adapter-sqlite':
+        specifier: ^3.0.2
+        version: 3.0.2(lucia@3.2.0)
       '@sveltejs/adapter-cloudflare':
         specifier: ^4.6.1
         version: 4.6.1(@sveltejs/kit@2.5.18(@sveltejs/vite-plugin-svelte@3.1.1(svelte@5.0.0-next.183)(vite@5.3.3(@types/node@20.14.10)))(svelte@5.0.0-next.183)(vite@5.3.3(@types/node@20.14.10)))(wrangler@3.65.1(@cloudflare/workers-types@4.20240718.0))
@@ -33,6 +26,9 @@ importers:
       '@types/eslint':
         specifier: ^8.56.10
         version: 8.56.10
+      arctic:
+        specifier: ^1.9.2
+        version: 1.9.2
       autoprefixer:
         specifier: ^10.4.19
         version: 10.4.19(postcss@8.4.39)
@@ -48,6 +44,9 @@ importers:
       globals:
         specifier: ^15.8.0
         version: 15.8.0
+      lucia:
+        specifier: ^3.2.0
+        version: 3.2.0
       postcss:
         specifier: ^8.4.39
         version: 8.4.39
