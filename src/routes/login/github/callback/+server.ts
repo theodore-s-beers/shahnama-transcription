@@ -75,7 +75,7 @@ export async function GET({ cookies, platform, url }) {
 		}
 
 		if (err instanceof SyntaxError) {
-			return new Response(`Syntax error: ${errorStage}`, { status: 500 });
+			return new Response(err.message, { status: 500 });
 		}
 
 		return new Response(errorStage, { status: 500 });
