@@ -70,6 +70,14 @@ export async function GET({ cookies, platform, url }) {
 			return new Response(null, { status: 400 }); // Invalid code
 		}
 
+		if (err instanceof TypeError) {
+			return new Response(`Type error: ${errorStage}`, { status: 500 });
+		}
+
+		if (err instanceof SyntaxError) {
+			return new Response(`Syntax error: ${errorStage}`, { status: 500 });
+		}
+
 		return new Response(errorStage, { status: 500 });
 	}
 }
