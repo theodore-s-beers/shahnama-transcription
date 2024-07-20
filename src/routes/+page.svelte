@@ -5,9 +5,15 @@
 	let pg = 3;
 
 	$: link = validSelection(vol, pg) ? `/${vol}/${pg}` : '';
+
+	export let data;
 </script>
 
 <div class="mx-auto max-w-7xl p-4 text-lg">
+	<div class="mb-2 flex justify-end">
+		<div>{data.userId || 'Not logged in'}</div>
+	</div>
+
 	<div class="mb-6 text-4xl">Transcribe the <em>Shāhnāma</em></div>
 
 	<div class="mb-6">Choose a volume and page.</div>
