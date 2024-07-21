@@ -76,6 +76,9 @@
 		URL.revokeObjectURL(url);
 	}
 
+	export let data;
+	const committer = typeof data.shortName === 'string' && data.shortName.length > 0;
+
 	onMount(() => {
 		if (!volNumber || volNumber < 1 || volNumber > 8) {
 			goto('/');
@@ -109,8 +112,22 @@
 <svelte:window on:keydown={handleKeydown} />
 
 <div class="mx-auto max-w-7xl p-4 text-lg">
-	<div class="mb-2 flex justify-center">
-		<a href="/" class="text-blue-800 hover:underline">Home</a>
+	<div class="mb-3 flex justify-end">
+		<div class="mr-8">
+			<a href="/" class="text-blue-800 hover:underline">Home</a>
+		</div>
+
+		{#if committer}
+			<div>
+				Signed in: <a href="/logout" class="text-green-700 hover:underline">{data.shortName}</a>
+			</div>
+		{:else if data.username}
+			<div>
+				Signed in: <a href="/logout" class="text-green-700 hover:underline">{data.username}</a>
+			</div>
+		{:else}
+			<div><a href="/login" class="text-blue-800 hover:underline">Sign in</a></div>
+		{/if}
 	</div>
 
 	<div class="mb-6 text-4xl">
