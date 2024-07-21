@@ -7,5 +7,5 @@ NODE_VERSION = "22"
 
 [[d1_databases]]
 binding = "AUTH_DB"
-database_name = "transcription-auth-alpha-2"
-database_id = "8c20eab1-92ae-40a5-bb0e-f8bbaada27ab"
+database_name = "transcription-auth-alpha3"
+database_id = "4c780188-e0fd-4860-874d-70eafaa278a2"
