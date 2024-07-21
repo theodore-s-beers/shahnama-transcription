@@ -16,7 +16,8 @@ export function initializeLucia(D1: D1Database) {
 		getUserAttributes: (attributes) => {
 			return {
 				githubId: attributes.github_id,
-				username: attributes.username
+				username: attributes.username,
+				shortName: attributes.short_name
 			};
 		}
 	});
@@ -32,4 +33,5 @@ declare module 'lucia' {
 interface DatabaseUserAttributes {
 	github_id: number;
 	username: string;
+	short_name: string | null;
 }

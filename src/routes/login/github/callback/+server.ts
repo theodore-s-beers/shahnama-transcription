@@ -71,4 +71,5 @@ interface UserRow {
 	id: string;
 	github_id: number;
 	username: string;
+	short_name: string | null;
 }
