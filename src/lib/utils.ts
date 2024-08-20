@@ -2,6 +2,22 @@
 // TYPES
 //
 
+/*
+id INTEGER NOT NULL PRIMARY KEY,
+volume_number INTEGER NOT NULL,
+page_number INTEGER NOT NULL,
+number_within_page INTEGER NOT NULL,
+editor TEXT NOT NULL,
+FOREIGN KEY (editor) REFERENCES user(short_name),
+heading INTEGER NOT NULL,
+heading_text TEXT,
+number_listed INTEGER,
+hemistich_one_text TEXT,
+hemistich_one_notes INTEGER,
+hemistich_two_text TEXT,
+hemistich_two_notes INTEGER
+*/
+
 export interface Line {
 	heading: boolean;
 	headingText?: string;
