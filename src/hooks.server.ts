@@ -2,7 +2,7 @@ import { initializeLucia } from '$lib/server/auth';
 import type { Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const lucia = initializeLucia(event.platform!.env.AUTH_DB);
+	const lucia = initializeLucia(event.platform!.env.DB);
 
 	const sessionId = event.cookies.get(lucia.sessionCookieName);
 	if (!sessionId) {

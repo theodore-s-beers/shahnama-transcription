@@ -12,7 +12,7 @@ declare global {
 		interface Platform {
 			cf: CfProperties;
 			ctx: ExecutionContext;
-			env: { AUTH_DB: D1Database };
+			env: { DB: D1Database };
 		}
 	}
 }

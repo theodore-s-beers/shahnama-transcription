@@ -15,7 +15,7 @@ export const actions = {
 			return fail(401);
 		}
 
-		const lucia = initializeLucia(event.platform!.env.AUTH_DB);
+		const lucia = initializeLucia(event.platform!.env.DB);
 		await lucia.invalidateSession(event.locals.session.id);
 
 		const sessionCookie = lucia.createBlankSessionCookie();
