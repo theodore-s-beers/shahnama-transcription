@@ -13,6 +13,12 @@ export async function GET({ cookies, platform, url }) {
 
 	try {
 		const tokens = await github.validateAuthorizationCode(code);
+		console.log("Tokens:", tokens); // For debugging
+		if (!tokens.accessToken) {
+			throw new Error("Missing access token");
+		}
+		console.log("Access token:", tokens.accessToken);
+
 		const githubUserResponse = await fetch("https://api.github.com/user", {
 			headers: {
 				Authorization: `Bearer ${tokens.accessToken}`,
