@@ -20,7 +20,7 @@ export async function GET({ cookies, platform, url }) {
 
 		const githubUserResponse = await fetch("https://api.github.com/user", {
 			headers: {
-				Authorization: `Bearer ${tokens.accessToken}`,
+				Authorization: `Bearer ${tokens.accessToken()}`,
 				"User-Agent": "Shahnama Transcription Alpha",
 			},
 		});
