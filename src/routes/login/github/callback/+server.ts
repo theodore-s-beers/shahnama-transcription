@@ -11,13 +11,12 @@ export async function GET({ cookies, platform, url }) {
 		return new Response(null, { status: 400 });
 	}
 
+	let stage = "Before validating authorization code";
+
 	try {
 		const tokens = await github.validateAuthorizationCode(code);
-		console.log("Tokens:", tokens); // For debugging
-		if (!tokens.accessToken) {
-			throw new Error("Missing access token");
-		}
-		console.log("Access token:", tokens.accessToken);
+
+		stage = "Before fetching user data";
 
 		const githubUserResponse = await fetch("https://api.github.com/user", {
 			headers: {
@@ -25,6 +24,9 @@ export async function GET({ cookies, platform, url }) {
 				"User-Agent": "Shāhnāma Transcription Alpha",
 			},
 		});
+
+		stage = "Before parsing user data";
+
 		const githubUser: GitHubUser = await githubUserResponse.json();
 
 		const sql = "SELECT * FROM user WHERE github_id = ?";
@@ -64,10 +66,18 @@ export async function GET({ cookies, platform, url }) {
 			return new Response(null, { status: 400 }); // Invalid code
 		}
 
-		// Try to get some info
 		if (err instanceof Error) {
-			return new Response(err.message, { status: 500 });
+			return new Response(
+				JSON.stringify({
+					message: err.message,
+					stage: stage,
+					stack: err.stack,
+				}),
+				{ status: 500 },
+			);
 		}
+
+		return new Response("Unknown error", { status: 500 });
 	}
 }
 
