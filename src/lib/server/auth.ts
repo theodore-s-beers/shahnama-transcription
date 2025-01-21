@@ -4,7 +4,7 @@ import { GitHub } from "arctic";
 import { Lucia } from "lucia";
 import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, GITHUB_CALLBACK_URI } from "$env/static/private";
 
-export const github = new GitHub(GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, GITHUB_CALLBACK_URI);
+export const github = new GitHub(GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, null);
 
 export function initializeLucia(D1: D1Database) {
 	const adapter = new D1Adapter(D1, {
