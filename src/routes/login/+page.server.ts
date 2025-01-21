@@ -17,7 +17,8 @@ export const actions = {
 		}
 
 		const state = generateState();
-		const url = await github.createAuthorizationURL(state);
+		const scopes = ['read:user'];
+		const url = await github.createAuthorizationURL(state, scopes);
 
 		event.cookies.set('github_oauth_state', state, {
 			path: '/',
