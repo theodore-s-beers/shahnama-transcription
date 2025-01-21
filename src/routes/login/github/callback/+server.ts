@@ -17,7 +17,7 @@ export async function GET({ cookies, platform, url }) {
 		const githubUserResponse = await fetch("https://api.github.com/user", {
 			headers: {
 				Authorization: `Bearer ${tokens.accessToken()}`,
-				"User-Agent": "Shahnama Transcription Alpha",
+				"User-Agent": "Shahnama-Transcription-Alpha",
 			},
 		});
 		const githubUser: GitHubUser = await githubUserResponse.json();
