@@ -1,10 +1,10 @@
-import { redirect } from '@sveltejs/kit';
-import { generateState } from 'arctic';
-import { github } from '$lib/server/auth';
+import { redirect } from "@sveltejs/kit";
+import { generateState } from "arctic";
+import { github } from "$lib/server/auth";
 
 export const load = async ({ locals }) => {
 	if (locals.user) {
-		return redirect(302, '/');
+		return redirect(302, "/");
 	}
 
 	return {};
@@ -13,21 +13,21 @@ export const load = async ({ locals }) => {
 export const actions = {
 	default: async (event) => {
 		if (event.locals.session) {
-			return redirect(302, '/');
+			return redirect(302, "/");
 		}
 
 		const state = generateState();
-		const scopes = ['read:user'];
+		const scopes = ["read:user"];
 		const url = await github.createAuthorizationURL(state, scopes);
 
-		event.cookies.set('github_oauth_state', state, {
-			path: '/',
+		event.cookies.set("github_oauth_state", state, {
+			path: "/",
 			secure: import.meta.env.PROD,
 			httpOnly: true,
 			maxAge: 60 * 10,
-			sameSite: 'lax'
+			sameSite: "lax",
 		});
 
 		return redirect(302, url.toString());
-	}
+	},
 };

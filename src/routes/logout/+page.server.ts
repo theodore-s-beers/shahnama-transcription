@@ -1,9 +1,9 @@
-import { fail, redirect } from '@sveltejs/kit';
-import { initializeLucia } from '$lib/server/auth';
+import { fail, redirect } from "@sveltejs/kit";
+import { initializeLucia } from "$lib/server/auth";
 
 export const load = async ({ locals }) => {
 	if (!locals.user) {
-		return redirect(302, '/login');
+		return redirect(302, "/login");
 	}
 
 	return {};
@@ -20,10 +20,10 @@ export const actions = {
 
 		const sessionCookie = lucia.createBlankSessionCookie();
 		event.cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: '.',
-			...sessionCookie.attributes
+			path: ".",
+			...sessionCookie.attributes,
 		});
 
-		return redirect(302, '/');
-	}
+		return redirect(302, "/");
+	},
 };

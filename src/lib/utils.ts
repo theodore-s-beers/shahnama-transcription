@@ -28,7 +28,7 @@ export const maxPages: Record<number, number> = {
 	5: 565,
 	6: 615,
 	7: 629,
-	8: 488
+	8: 488,
 };
 
 //

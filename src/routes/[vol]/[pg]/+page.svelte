@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
-	import { maxPages, type Line } from '$lib/utils';
+	import { page } from "$app/stores";
+	import { goto } from "$app/navigation";
+	import { onMount } from "svelte";
+	import { maxPages, type Line } from "$lib/utils";
 
 	$: vol = $page.params.vol;
 	$: volNumber = parseInt(vol);
@@ -25,8 +25,8 @@
 		lines = Array.from({ length: lineCount }, (_, i) => ({
 			heading: false,
 			numberWithinPage: i + 1,
-			hemistichOne: { text: '', hasNotes: false },
-			hemistichTwo: { text: '', hasNotes: false }
+			hemistichOne: { text: "", hasNotes: false },
+			hemistichTwo: { text: "", hasNotes: false },
 		}));
 
 		localStorage.setItem(`lineCount-${volNumber}-${pgNumber}`, lineCount.toString());
@@ -36,7 +36,7 @@
 	let showTranscription = false;
 
 	function handleKeydown(e: KeyboardEvent) {
-		if (e.key === '\\' && lineCountConfirmed) {
+		if (e.key === "\\" && lineCountConfirmed) {
 			showTranscription = !showTranscription;
 		}
 	}
@@ -57,7 +57,7 @@
 				return {
 					heading: true,
 					headingText: line.headingText,
-					numberWithinPage: line.numberWithinPage
+					numberWithinPage: line.numberWithinPage,
 				};
 			} else {
 				return line;
@@ -65,9 +65,9 @@
 		});
 
 		const data = JSON.stringify(linesFixed, null, 2);
-		const blob = new Blob([data], { type: 'application/json' });
+		const blob = new Blob([data], { type: "application/json" });
 		const url = URL.createObjectURL(blob);
-		const a = document.createElement('a');
+		const a = document.createElement("a");
 		a.href = url;
 		a.download = `vol${volNumber}-pg${pgNumber}.json`;
 		document.body.appendChild(a);
@@ -77,15 +77,15 @@
 	}
 
 	export let data;
-	const committer = typeof data.shortName === 'string' && data.shortName.length > 0;
+	const committer = typeof data.shortName === "string" && data.shortName.length > 0;
 
 	onMount(() => {
 		if (!volNumber || volNumber < 1 || volNumber > 8) {
-			goto('/');
+			goto("/");
 		}
 
 		if (!pgNumber || pgNumber < 3 || pgNumber > maxPages[volNumber]) {
-			goto('/');
+			goto("/");
 		}
 
 		const storedLineCount = localStorage.getItem(`lineCount-${volNumber}-${pgNumber}`);
@@ -102,8 +102,8 @@
 			lines = Array.from({ length: lineCount }, (_, i) => ({
 				heading: false,
 				numberWithinPage: i + 1,
-				hemistichOne: { text: '', hasNotes: false },
-				hemistichTwo: { text: '', hasNotes: false }
+				hemistichOne: { text: "", hasNotes: false },
+				hemistichTwo: { text: "", hasNotes: false },
 			}));
 		}
 	});
@@ -152,7 +152,7 @@
 			class="mr-4 w-16 rounded border border-black p-2 invalid:bg-red-100 disabled:bg-green-100"
 			disabled={lineCountConfirmed}
 			on:keydown={(e) => {
-				if (e.key === 'Enter') confirmLineCount();
+				if (e.key === "Enter") confirmLineCount();
 			}}
 		/>
 		<button
@@ -256,7 +256,7 @@
 		<hr class="mb-6 border border-dashed border-black" />
 
 		<img
-			src={`/km/${volNumber}-${String(pgNumber).padStart(3, '0')}.png`}
+			src={`/km/${volNumber}-${String(pgNumber).padStart(3, "0")}.png`}
 			alt="Go fuck yourself"
 			class="rounded border border-black"
 		/>

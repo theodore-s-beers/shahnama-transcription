@@ -1,14 +1,14 @@
 <script lang="ts">
-	import { maxPages, validSelection } from '$lib/utils';
+	import { maxPages, validSelection } from "$lib/utils";
 
 	let vol = 1;
 	let pg = 3;
 
-	$: link = validSelection(vol, pg) ? `/${vol}/${pg}` : '';
+	$: link = validSelection(vol, pg) ? `/${vol}/${pg}` : "";
 
 	export let data;
 
-	const committer = typeof data.shortName === 'string' && data.shortName.length > 0;
+	const committer = typeof data.shortName === "string" && data.shortName.length > 0;
 </script>
 
 <div class="mx-auto max-w-7xl p-4 text-lg">

@@ -1,5 +1,5 @@
-import { initializeLucia } from '$lib/server/auth';
-import type { Handle } from '@sveltejs/kit';
+import { initializeLucia } from "$lib/server/auth";
+import type { Handle } from "@sveltejs/kit";
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const lucia = initializeLucia(event.platform!.env.DB);
@@ -16,16 +16,16 @@ export const handle: Handle = async ({ event, resolve }) => {
 	if (session && session.fresh) {
 		const sessionCookie = lucia.createSessionCookie(session.id);
 		event.cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: '.',
-			...sessionCookie.attributes
+			path: ".",
+			...sessionCookie.attributes,
 		});
 	}
 
 	if (!session) {
 		const sessionCookie = lucia.createBlankSessionCookie();
 		event.cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: '.',
-			...sessionCookie.attributes
+			path: ".",
+			...sessionCookie.attributes,
 		});
 	}
 
