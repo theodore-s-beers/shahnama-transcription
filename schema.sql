@@ -1,7 +1,7 @@
 CREATE TABLE user (
     id TEXT NOT NULL PRIMARY KEY,
     github_id INTEGER NOT NULL UNIQUE,
-    username TEXT NOT NULL,
+    username TEXT NOT NULL UNIQUE,
     short_name TEXT UNIQUE
 );
 
