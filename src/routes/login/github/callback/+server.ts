@@ -58,7 +58,10 @@ export async function GET({ cookies, platform, url }) {
 			return new Response(null, { status: 400 }); // Invalid code
 		}
 
-		return new Response(null, { status: 500 });
+		// Try to get some info
+		if (err instanceof Error) {
+			return new Response(err.message, { status: 500 });
+		}
 	}
 }
 
