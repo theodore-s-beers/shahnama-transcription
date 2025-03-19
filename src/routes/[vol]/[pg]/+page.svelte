@@ -173,7 +173,7 @@
 
 		<hr class="mb-6 border border-dashed border-black" />
 
-		{#each lines as line, i}
+		{#each lines as line, i (line.numberWithinPage)}
 			<div class="flex items-center">
 				<div class="w-9 font-semibold">{i + 1}</div>
 
