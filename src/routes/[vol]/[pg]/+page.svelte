@@ -1,14 +1,11 @@
 <script lang="ts">
-	import { page } from "$app/stores";
+	import { page } from "$app/state";
 	import { goto } from "$app/navigation";
 	import { onMount } from "svelte";
 	import { maxPages, type Line } from "$lib/utils";
 
-	$: vol = $page.params.vol;
-	$: volNumber = parseInt(vol);
-
-	$: pg = $page.params.pg;
-	$: pgNumber = parseInt(pg);
+	let volNumber = parseInt(page.params.vol);
+	let pgNumber = parseInt(page.params.pg);
 
 	let lines: Line[] = [];
 	let lineCount = 0;
