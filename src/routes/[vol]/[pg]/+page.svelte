@@ -73,6 +73,27 @@
 		URL.revokeObjectURL(url);
 	}
 
+	async function submitLines() {
+		try {
+			const res = await fetch("/api/submit", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify("dummy"), // Replace with actual data
+			});
+
+			if (!res.ok) {
+				console.error("Error:", res.status, await res.text());
+				return;
+			}
+
+			const text = await res.text(); // Or res.json() if returning JSON
+			console.log(text);
+		} catch (err) {
+			if (err instanceof Error) console.error(err.message);
+			else console.error(err);
+		}
+	}
+
 	export let data;
 	const committer = typeof data.shortName === "string" && data.shortName.length > 0;
 
@@ -158,7 +179,7 @@
 	{#if lineCountConfirmed && showTranscription}
 		<div class="-mt-2 mb-6 ml-16 flex gap-4">
 			{#if committer}
-				<button on:click={downloadLines} class="rounded bg-green-800 px-3 py-2 text-white"
+				<button on:click={submitLines} class="rounded bg-green-800 px-3 py-2 text-white"
 					>Submit</button
 				>
 			{:else}
