@@ -8,7 +8,7 @@ const config = {
 	kit: {
 		adapter: cloudflareAdapter({
 			routes: {
-				exclude: ["<build>", "<prerendered>", "/*.png"],
+				exclude: ["<build>", "<prerendered>", "/km/*"],
 			},
 		}),
 	},
