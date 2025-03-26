@@ -1,7 +1,8 @@
 import { fail, redirect } from "@sveltejs/kit";
 import { initializeLucia } from "$lib/server/auth";
+import type { Actions, PageServerLoad } from "./$types";
 
-export const load = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals }) => {
 	if (!locals.user) {
 		return redirect(302, "/login");
 	}
@@ -26,4 +27,4 @@ export const actions = {
 
 		return redirect(302, "/");
 	},
-};
+} satisfies Actions;

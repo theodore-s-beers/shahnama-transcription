@@ -1,8 +1,9 @@
 import { OAuth2RequestError } from "arctic";
 import { generateIdFromEntropySize } from "lucia";
 import { github, initializeLucia } from "$lib/server/auth";
+import type { RequestHandler } from "./$types";
 
-export async function GET({ cookies, platform, url }) {
+export const GET: RequestHandler = async ({ cookies, platform, url }) => {
 	const code = url.searchParams.get("code");
 	const state = url.searchParams.get("state");
 	const storedState = cookies.get("github_oauth_state") ?? null;
@@ -68,7 +69,7 @@ export async function GET({ cookies, platform, url }) {
 
 		return new Response("Unknown error", { status: 500 });
 	}
-}
+};
 
 interface GitHubUser {
 	id: number;
