@@ -254,7 +254,7 @@
 
 		<img
 			src={`/km/${volNumber}-${String(pgNumber).padStart(3, "0")}.png`}
-			alt="Go fuck yourself"
+			alt="A page from the Shahnama"
 			class="rounded border border-black"
 		/>
 	{/if}
