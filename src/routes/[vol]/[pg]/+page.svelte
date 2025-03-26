@@ -77,13 +77,8 @@
 	const committer = typeof data.shortName === "string" && data.shortName.length > 0;
 
 	onMount(() => {
-		if (!volNumber || volNumber < 1 || volNumber > 8) {
-			goto("/");
-		}
-
-		if (!pgNumber || pgNumber < 3 || pgNumber > maxPages[volNumber]) {
-			goto("/");
-		}
+		if (!volNumber || volNumber < 1 || volNumber > 8) goto("/");
+		if (!pgNumber || pgNumber < 3 || pgNumber > maxPages[volNumber]) goto("/");
 
 		const storedLineCount = localStorage.getItem(`lineCount-${volNumber}-${pgNumber}`);
 		if (storedLineCount) {
@@ -162,9 +157,15 @@
 
 	{#if lineCountConfirmed && showTranscription}
 		<div class="-mt-2 mb-6 ml-16 flex gap-4">
-			<button on:click={downloadLines} class="rounded bg-green-800 px-3 py-2 text-white"
-				>Download</button
-			>
+			{#if committer}
+				<button on:click={downloadLines} class="rounded bg-green-800 px-3 py-2 text-white"
+					>Submit</button
+				>
+			{:else}
+				<button on:click={downloadLines} class="rounded bg-green-800 px-3 py-2 text-white"
+					>Download</button
+				>
+			{/if}
 			<button on:click={resetLines} class="rounded bg-red-800 px-3 py-2 text-white">Reset</button>
 		</div>
 
