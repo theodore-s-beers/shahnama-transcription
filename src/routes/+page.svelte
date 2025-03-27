@@ -1,25 +1,25 @@
 <script lang="ts">
 	import { maxPages, validSelection } from "$lib/utils";
 
-	let vol = 1;
-	let pg = 3;
+	let vol = $state(1);
+	let pg = $state(3);
 
-	$: link = validSelection(vol, pg) ? `/${vol}/${pg}` : "";
+	let linkElement: HTMLAnchorElement;
+	let linkAddress = $derived(validSelection(vol, pg) ? `/${vol}/${pg}` : "/");
 
-	export let data;
-
-	const committer = typeof data.shortName === "string" && data.shortName.length > 0;
+	let props = $props();
+	const committer = typeof props.shortName === "string" && props.shortName.length > 0;
 </script>
 
 <div class="mx-auto max-w-7xl p-4 text-lg">
 	<div class="mb-3 flex justify-end">
 		{#if committer}
 			<div>
-				Signed in: <a href="/logout" class="text-green-700 hover:underline">{data.shortName}</a>
+				Signed in: <a href="/logout" class="text-green-700 hover:underline">{props.shortName}</a>
 			</div>
-		{:else if data.username}
+		{:else if props.username}
 			<div>
-				Signed in: <a href="/logout" class="text-green-700 hover:underline">{data.username}</a>
+				Signed in: <a href="/logout" class="text-green-700 hover:underline">{props.username}</a>
 			</div>
 		{:else}
 			<div><a href="/login" class="text-blue-800 hover:underline">Sign in</a></div>
@@ -50,9 +50,18 @@
 			bind:value={pg}
 			min="3"
 			max={maxPages[vol] || 0}
+			onkeydown={(e) => {
+				if (e.key === "Enter") linkElement.click();
+			}}
 			class="w-20 rounded border border-black p-2 invalid:bg-red-100 disabled:bg-green-100"
 		/>
 	</div>
 
-	<a href={link} class="ml-20 flex w-20 justify-center rounded bg-blue-700 py-2 text-white">Open</a>
+	<a
+		bind:this={linkElement}
+		href={linkAddress}
+		class="ml-20 flex w-20 justify-center rounded bg-blue-700 py-2 text-white"
+	>
+		Open
+	</a>
 </div>

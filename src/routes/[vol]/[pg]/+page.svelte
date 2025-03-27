@@ -7,14 +7,12 @@
 	let volNumber = parseInt(page.params.vol);
 	let pgNumber = parseInt(page.params.pg);
 
-	let lines: Line[] = [];
-	let lineCount = 0;
-	let lineCountConfirmed = false;
+	let lines: Line[] = $state([]);
+	let lineCount = $state(0);
+	let lineCountConfirmed = $state(false);
 
 	function confirmLineCount() {
-		if (lineCount < 1 || lineCount > 25) {
-			return;
-		}
+		if (lineCount < 1 || lineCount > 25) return;
 
 		lineCountConfirmed = true;
 		showTranscription = true;
@@ -30,12 +28,10 @@
 		localStorage.setItem(`lines-${volNumber}-${pgNumber}`, JSON.stringify(lines));
 	}
 
-	let showTranscription = false;
+	let showTranscription = $state(false);
 
 	function handleKeydown(e: KeyboardEvent) {
-		if (e.key === "\\" && lineCountConfirmed) {
-			showTranscription = !showTranscription;
-		}
+		if (e.key === "\\" && lineCountConfirmed) showTranscription = !showTranscription;
 	}
 
 	function resetLines() {
@@ -56,9 +52,7 @@
 					headingText: line.headingText,
 					numberWithinPage: line.numberWithinPage,
 				};
-			} else {
-				return line;
-			}
+			} else return line;
 		});
 
 		const data = JSON.stringify(linesFixed, null, 2);
@@ -94,8 +88,8 @@
 		}
 	}
 
-	export let data;
-	const committer = typeof data.shortName === "string" && data.shortName.length > 0;
+	let props = $props();
+	const committer = typeof props.shortName === "string" && props.shortName.length > 0;
 
 	onMount(() => {
 		if (!volNumber || volNumber < 1 || volNumber > 8) goto("/");
@@ -132,11 +126,11 @@
 
 		{#if committer}
 			<div>
-				Signed in: <a href="/logout" class="text-green-700 hover:underline">{data.shortName}</a>
+				Signed in: <a href="/logout" class="text-green-700 hover:underline">{props.shortName}</a>
 			</div>
-		{:else if data.username}
+		{:else if props.username}
 			<div>
-				Signed in: <a href="/logout" class="text-green-700 hover:underline">{data.username}</a>
+				Signed in: <a href="/logout" class="text-green-700 hover:underline">{props.username}</a>
 			</div>
 		{:else}
 			<div><a href="/login" class="text-blue-800 hover:underline">Sign in</a></div>
@@ -164,28 +158,31 @@
 			max="25"
 			class="mr-4 w-16 rounded border border-black p-2 invalid:bg-red-100 disabled:bg-green-100"
 			disabled={lineCountConfirmed}
-			on:keydown={(e) => {
+			onkeydown={(e) => {
 				if (e.key === "Enter") confirmLineCount();
 			}}
 		/>
+
 		<button
-			class="rounded border bg-blue-700 px-3 py-2 text-white"
+			class="cursor-pointer rounded border bg-blue-700 px-3 py-2 text-white"
 			class:bg-gray-600={lineCountConfirmed}
-			on:click={confirmLineCount}
-			disabled={lineCountConfirmed}>Set</button
+			onclick={confirmLineCount}
+			disabled={lineCountConfirmed}
 		>
+			Set
+		</button>
 	</div>
 
 	{#if lineCountConfirmed && showTranscription}
 		<div class="-mt-2 mb-6 ml-16 flex gap-4">
 			<button
-				on:click={committer ? submitLines : downloadLines}
+				onclick={committer ? submitLines : downloadLines}
 				class="cursor-pointer rounded bg-green-800 px-3 py-2 text-white"
 			>
 				{committer ? "Submit" : "Download"}
 			</button>
 
-			<button on:click={resetLines} class="cursor-pointer rounded bg-red-800 px-3 py-2 text-white">
+			<button onclick={resetLines} class="cursor-pointer rounded bg-red-800 px-3 py-2 text-white">
 				Reset
 			</button>
 		</div>
@@ -200,7 +197,7 @@
 					class="mb-4 flex grow items-center gap-4 rounded border border-black bg-white p-4"
 					dir="rtl"
 					spellcheck="false"
-					on:change={() =>
+					onchange={() =>
 						localStorage.setItem(`lines-${volNumber}-${pgNumber}`, JSON.stringify(lines))}
 				>
 					<div class="flex flex-col">
