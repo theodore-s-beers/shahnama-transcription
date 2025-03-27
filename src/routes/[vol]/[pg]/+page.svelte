@@ -144,7 +144,7 @@
 	</div>
 
 	<div class="mb-6 text-4xl">
-		{@html `Transcribe the <em>Shāhnāma</em> – vol. ${volNumber}, pg. ${pgNumber}`}
+		Transcribe the <em>Shāhnāma</em> – vol. {volNumber}, pg. {pgNumber}
 	</div>
 
 	{#if lineCountConfirmed}
@@ -178,16 +178,16 @@
 
 	{#if lineCountConfirmed && showTranscription}
 		<div class="-mt-2 mb-6 ml-16 flex gap-4">
-			{#if committer}
-				<button on:click={submitLines} class="rounded bg-green-800 px-3 py-2 text-white"
-					>Submit</button
-				>
-			{:else}
-				<button on:click={downloadLines} class="rounded bg-green-800 px-3 py-2 text-white"
-					>Download</button
-				>
-			{/if}
-			<button on:click={resetLines} class="rounded bg-red-800 px-3 py-2 text-white">Reset</button>
+			<button
+				on:click={committer ? submitLines : downloadLines}
+				class="cursor-pointer rounded bg-green-800 px-3 py-2 text-white"
+			>
+				{committer ? "Submit" : "Download"}
+			</button>
+
+			<button on:click={resetLines} class="cursor-pointer rounded bg-red-800 px-3 py-2 text-white">
+				Reset
+			</button>
 		</div>
 
 		<hr class="mb-6 border border-dashed border-black" />
