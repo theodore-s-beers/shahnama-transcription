@@ -7,13 +7,13 @@ export interface Line {
 	headingText?: string;
 	numberWithinPage: number;
 	numberListed?: number;
-	hemistichOne?: Hemistich | null;
-	hemistichTwo?: Hemistich | null;
+	hemistichOne: Hemistich;
+	hemistichTwo: Hemistich;
 }
 
 interface Hemistich {
-	text: string;
-	hasNotes: boolean;
+	text: string | null;
+	hasNotes: boolean | null;
 }
 
 //
@@ -41,12 +41,12 @@ export function normalizeLines(lines: Line[]): Line[] {
 		cleaned.push({
 			...line,
 			headingText: line.headingText ? cleanString(line.headingText) : undefined,
-			hemistichOne: line.hemistichOne
-				? { text: cleanString(line.hemistichOne.text), hasNotes: line.hemistichOne.hasNotes }
-				: null,
-			hemistichTwo: line.hemistichTwo
-				? { text: cleanString(line.hemistichTwo.text), hasNotes: line.hemistichTwo.hasNotes }
-				: null,
+			hemistichOne: line.hemistichOne.text
+				? { ...line.hemistichOne, text: cleanString(line.hemistichOne.text) }
+				: { text: null, hasNotes: null },
+			hemistichTwo: line.hemistichTwo.text
+				? { ...line.hemistichTwo, text: cleanString(line.hemistichTwo.text) }
+				: { text: null, hasNotes: null },
 		});
 	}
 	return cleaned;

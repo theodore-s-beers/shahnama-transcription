@@ -21,6 +21,8 @@
 		lines = Array.from({ length: lineCount }, (_, i) => ({
 			heading: false,
 			numberWithinPage: i + 1,
+			hemistichOne: { text: null, hasNotes: null },
+			hemistichTwo: { text: null, hasNotes: null },
 		}));
 
 		localStorage.setItem(`lineCount-${volNumber}-${pgNumber}`, lineCount.toString());
@@ -112,6 +114,8 @@
 			lines = Array.from({ length: lineCount }, (_, i) => ({
 				heading: false,
 				numberWithinPage: i + 1,
+				hemistichOne: { text: null, hasNotes: null },
+				hemistichTwo: { text: null, hasNotes: null },
 			}));
 		}
 	});
