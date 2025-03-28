@@ -82,6 +82,8 @@
 			});
 
 			if (!res.ok) throw new Error(`${res.status}: ${await res.text()}`);
+
+			console.log("Success");
 		} catch (err) {
 			if (err instanceof Error) console.error(err.message);
 			else console.error(err);
