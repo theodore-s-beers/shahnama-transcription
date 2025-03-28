@@ -69,6 +69,8 @@
 	}
 
 	async function submitLines() {
+		console.log(cleanLines(lines)); // For debugging
+
 		try {
 			const params = new URLSearchParams({
 				vol: volNumber.toString(),
