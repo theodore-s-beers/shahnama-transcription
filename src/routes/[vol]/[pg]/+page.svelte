@@ -69,7 +69,8 @@
 	}
 
 	async function submitLines() {
-		console.log(normalizeLines(lines)); // For debugging
+		console.log(JSON.stringify(lines)); // For debugging
+		console.log(JSON.stringify(normalizeLines(lines))); // For debugging
 
 		try {
 			const params = new URLSearchParams({
