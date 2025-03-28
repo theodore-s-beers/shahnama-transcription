@@ -69,9 +69,6 @@
 	}
 
 	async function submitLines() {
-		console.log(JSON.stringify(lines)); // For debugging
-		console.log(JSON.stringify(normalizeLines(lines))); // For debugging
-
 		try {
 			const params = new URLSearchParams({
 				vol: volNumber.toString(),
@@ -85,7 +82,6 @@
 			});
 
 			if (!res.ok) throw new Error(`${res.status}: ${await res.text()}`);
-
 			console.log("Success");
 		} catch (err) {
 			if (err instanceof Error) console.error(err.message);
