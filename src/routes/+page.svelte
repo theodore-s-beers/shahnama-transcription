@@ -38,6 +38,9 @@
 			bind:value={vol}
 			min="1"
 			max="8"
+			onkeydown={(e) => {
+				if (e.key === "Enter") linkElement.click();
+			}}
 			class="w-14 rounded border border-black p-2 invalid:bg-red-100 disabled:bg-green-100"
 		/>
 	</div>
