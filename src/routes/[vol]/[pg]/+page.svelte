@@ -2,7 +2,7 @@
 	import { page } from "$app/state";
 	import { goto } from "$app/navigation";
 	import { onMount } from "svelte";
-	import { cleanLines, maxPages, type Line } from "$lib/utils";
+	import { maxPages, normalizeLines, type Line } from "$lib/utils";
 	import type { PageProps } from "./$types";
 
 	let volNumber = parseInt(page.params.vol);
@@ -69,7 +69,7 @@
 	}
 
 	async function submitLines() {
-		console.log(cleanLines(lines)); // For debugging
+		console.log(normalizeLines(lines)); // For debugging
 
 		try {
 			const params = new URLSearchParams({
@@ -80,7 +80,7 @@
 			const res = await fetch(`/api/submit?${params}`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(cleanLines(lines)),
+				body: JSON.stringify(normalizeLines(lines)),
 			});
 
 			if (!res.ok) throw new Error(`${res.status}: ${await res.text()}`);

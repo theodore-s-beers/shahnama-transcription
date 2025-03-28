@@ -7,8 +7,8 @@ export interface Line {
 	headingText?: string;
 	numberWithinPage: number;
 	numberListed?: number;
-	hemistichOne?: Hemistich;
-	hemistichTwo?: Hemistich;
+	hemistichOne?: Hemistich | null;
+	hemistichTwo?: Hemistich | null;
 }
 
 interface Hemistich {
@@ -35,7 +35,7 @@ export const maxPages: Record<number, number> = {
 // FUNCTIONS
 //
 
-export function cleanLines(lines: Line[]): Line[] {
+export function normalizeLines(lines: Line[]): Line[] {
 	const cleaned: Line[] = [];
 	for (const line of lines) {
 		cleaned.push({
@@ -43,10 +43,10 @@ export function cleanLines(lines: Line[]): Line[] {
 			headingText: line.headingText ? cleanString(line.headingText) : undefined,
 			hemistichOne: line.hemistichOne
 				? { ...line.hemistichOne, text: cleanString(line.hemistichOne.text) }
-				: undefined,
+				: null,
 			hemistichTwo: line.hemistichTwo
 				? { ...line.hemistichTwo, text: cleanString(line.hemistichTwo.text) }
-				: undefined,
+				: null,
 		});
 	}
 	return cleaned;
