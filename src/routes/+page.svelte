@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { maxPages, validSelection } from "$lib/utils";
+	import type { PageProps } from "./$types";
 
 	let vol = $state(1);
 	let pg = $state(3);
@@ -7,19 +8,19 @@
 	let linkElement: HTMLAnchorElement;
 	let linkAddress = $derived(validSelection(vol, pg) ? `/${vol}/${pg}` : "/");
 
-	let props = $props();
-	const committer = typeof props.shortName === "string" && props.shortName.length > 0;
+	let { data }: PageProps = $props();
+	const committer = typeof data.shortName === "string" && data.shortName.length > 0;
 </script>
 
 <div class="mx-auto max-w-7xl p-4 text-lg">
 	<div class="mb-3 flex justify-end">
 		{#if committer}
 			<div>
-				Signed in: <a href="/logout" class="text-green-700 hover:underline">{props.shortName}</a>
+				Signed in: <a href="/logout" class="text-green-700 hover:underline">{data.shortName}</a>
 			</div>
-		{:else if props.username}
+		{:else if data.username}
 			<div>
-				Signed in: <a href="/logout" class="text-green-700 hover:underline">{props.username}</a>
+				Signed in: <a href="/logout" class="text-green-700 hover:underline">{data.username}</a>
 			</div>
 		{:else}
 			<div><a href="/login" class="text-blue-800 hover:underline">Sign in</a></div>

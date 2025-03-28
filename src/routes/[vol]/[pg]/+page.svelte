@@ -3,6 +3,7 @@
 	import { goto } from "$app/navigation";
 	import { onMount } from "svelte";
 	import { maxPages, type Line } from "$lib/utils";
+	import type { PageProps } from "./$types";
 
 	let volNumber = parseInt(page.params.vol);
 	let pgNumber = parseInt(page.params.pg);
@@ -88,8 +89,8 @@
 		}
 	}
 
-	let props = $props();
-	const committer = typeof props.shortName === "string" && props.shortName.length > 0;
+	let { data }: PageProps = $props();
+	const committer = typeof data.shortName === "string" && data.shortName.length > 0;
 
 	onMount(() => {
 		if (!volNumber || volNumber < 1 || volNumber > 8) goto("/");
@@ -126,11 +127,11 @@
 
 		{#if committer}
 			<div>
-				Signed in: <a href="/logout" class="text-green-700 hover:underline">{props.shortName}</a>
+				Signed in: <a href="/logout" class="text-green-700 hover:underline">{data.shortName}</a>
 			</div>
-		{:else if props.username}
+		{:else if data.username}
 			<div>
-				Signed in: <a href="/logout" class="text-green-700 hover:underline">{props.username}</a>
+				Signed in: <a href="/logout" class="text-green-700 hover:underline">{data.username}</a>
 			</div>
 		{:else}
 			<div><a href="/login" class="text-blue-800 hover:underline">Sign in</a></div>
