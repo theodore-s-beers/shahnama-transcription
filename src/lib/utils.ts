@@ -42,10 +42,10 @@ export function normalizeLines(lines: Line[]): Line[] {
 			...line,
 			headingText: line.headingText ? cleanString(line.headingText) : undefined,
 			hemistichOne: line.hemistichOne
-				? { ...line.hemistichOne, text: cleanString(line.hemistichOne.text) }
+				? { text: cleanString(line.hemistichOne.text), hasNotes: line.hemistichOne.hasNotes }
 				: null,
 			hemistichTwo: line.hemistichTwo
-				? { ...line.hemistichTwo, text: cleanString(line.hemistichTwo.text) }
+				? { text: cleanString(line.hemistichTwo.text), hasNotes: line.hemistichTwo.hasNotes }
 				: null,
 		});
 	}
