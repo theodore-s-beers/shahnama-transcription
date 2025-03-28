@@ -2,7 +2,7 @@
 	import { page } from "$app/state";
 	import { goto } from "$app/navigation";
 	import { onMount } from "svelte";
-	import { maxPages, type Line } from "$lib/utils";
+	import { cleanLines, maxPages, type Line } from "$lib/utils";
 	import type { PageProps } from "./$types";
 
 	let volNumber = parseInt(page.params.vol);
@@ -70,19 +70,18 @@
 
 	async function submitLines() {
 		try {
-			const res = await fetch("/api/submit", {
+			const params = new URLSearchParams({
+				vol: volNumber.toString(),
+				pg: pgNumber.toString(),
+			}).toString();
+
+			const res = await fetch(`/api/submit?${params}`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify("dummy"), // Replace with actual data
+				body: JSON.stringify(cleanLines(lines)),
 			});
 
-			if (!res.ok) {
-				console.error("Error:", res.status, await res.text());
-				return;
-			}
-
-			const text = await res.text(); // Or res.json() if returning JSON
-			console.log(text);
+			if (!res.ok) throw new Error(`${res.status}: ${await res.text()}`);
 		} catch (err) {
 			if (err instanceof Error) console.error(err.message);
 			else console.error(err);

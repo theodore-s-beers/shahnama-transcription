@@ -35,6 +35,27 @@ export const maxPages: Record<number, number> = {
 // FUNCTIONS
 //
 
+export function cleanLines(lines: Line[]): Line[] {
+	const cleaned: Line[] = [];
+	for (const line of lines) {
+		cleaned.push({
+			...line,
+			headingText: line.headingText ? cleanString(line.headingText) : undefined,
+			hemistichOne: line.hemistichOne
+				? { ...line.hemistichOne, text: cleanString(line.hemistichOne.text) }
+				: undefined,
+			hemistichTwo: line.hemistichTwo
+				? { ...line.hemistichTwo, text: cleanString(line.hemistichTwo.text) }
+				: undefined,
+		});
+	}
+	return cleaned;
+}
+
 export function validSelection(vol: number, pg: number): boolean {
 	return vol >= 1 && vol <= 8 && pg >= 3 && pg <= maxPages[vol];
+}
+
+function cleanString(input: string): string {
+	return input.trim().replace(/\p{White_Space}+/gu, " ");
 }
