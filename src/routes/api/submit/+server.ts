@@ -82,10 +82,10 @@ export const POST: RequestHandler = async ({ locals, platform, request }) => {
 				line.heading,
 				line.headingText ?? null,
 				line.numberListed ?? null,
-				line.hemistichOne?.text ?? null,
-				line.hemistichOne?.hasNotes ?? null,
-				line.hemistichTwo?.text ?? null,
-				line.hemistichTwo?.hasNotes ?? null,
+				line.hemistichOne ? line.hemistichOne.text : null,
+				line.hemistichOne ? line.hemistichOne.hasNotes : null,
+				line.hemistichTwo ? line.hemistichTwo.text : null,
+				line.hemistichTwo ? line.hemistichTwo.hasNotes : null,
 			),
 	);
 
