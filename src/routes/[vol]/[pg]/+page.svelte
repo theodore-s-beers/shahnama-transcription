@@ -46,29 +46,25 @@
 	}
 
 	function downloadLines() {
-		const linesFixed = lines.map((line) => {
-			if (line.heading) {
-				return {
-					heading: true,
-					headingText: line.headingText,
-					numberWithinPage: line.numberWithinPage,
-				};
-			} else return line;
-		});
-
-		const data = JSON.stringify(linesFixed, null, 2);
+		lines = normalizeLines(lines);
+		const data = JSON.stringify(lines, null, 2);
 		const blob = new Blob([data], { type: "application/json" });
+
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement("a");
 		a.href = url;
 		a.download = `vol${volNumber}-pg${pgNumber}.json`;
+
 		document.body.appendChild(a);
 		a.click();
+
 		document.body.removeChild(a);
 		URL.revokeObjectURL(url);
 	}
 
 	async function submitLines() {
+		lines = normalizeLines(lines);
+
 		try {
 			const params = new URLSearchParams({
 				vol: volNumber.toString(),
@@ -78,7 +74,7 @@
 			const res = await fetch(`/api/submit?${params}`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(normalizeLines(lines)),
+				body: JSON.stringify(lines),
 			});
 
 			if (!res.ok) throw new Error(`${res.status}: ${await res.text()}`);

@@ -39,16 +39,27 @@ export function normalizeLines(lines: Line[]): Line[] {
 	const cleaned: Line[] = [];
 
 	for (const line of lines) {
-		cleaned.push({
-			...line,
-			headingText: line.headingText ? cleanString(line.headingText) : undefined,
-			hemistichOne: line.hemistichOne.text
-				? { ...line.hemistichOne, text: cleanString(line.hemistichOne.text) }
-				: {},
-			hemistichTwo: line.hemistichTwo.text
-				? { ...line.hemistichTwo, text: cleanString(line.hemistichTwo.text) }
-				: {},
-		});
+		const newLine: Line = line.heading
+			? {
+					heading: true,
+					headingText: line.headingText,
+					numberWithinPage: line.numberWithinPage,
+					hemistichOne: {},
+					hemistichTwo: {},
+				}
+			: {
+					heading: false,
+					numberWithinPage: line.numberWithinPage,
+					numberListed: line.numberListed,
+					hemistichOne: line.hemistichOne.text
+						? { ...line.hemistichOne, text: cleanString(line.hemistichOne.text) }
+						: {},
+					hemistichTwo: line.hemistichTwo.text
+						? { ...line.hemistichTwo, text: cleanString(line.hemistichTwo.text) }
+						: {},
+				};
+
+		cleaned.push(newLine);
 	}
 
 	return cleaned;
