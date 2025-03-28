@@ -37,19 +37,11 @@ export const POST: RequestHandler = async ({ locals, platform, request }) => {
 			else continue;
 		}
 
-		if (
-			!line.hemistichOne ||
-			!line.hemistichOne.text ||
-			typeof line.hemistichOne.hasNotes !== "boolean"
-		) {
+		if (!line.hemistichOne.text || typeof line.hemistichOne.hasNotes !== "boolean") {
 			return new Response("Missing or invalid first hemistich", { status: 400 });
 		}
 
-		if (
-			!line.hemistichTwo ||
-			!line.hemistichTwo.text ||
-			typeof line.hemistichTwo.hasNotes !== "boolean"
-		) {
+		if (!line.hemistichTwo.text || typeof line.hemistichTwo.hasNotes !== "boolean") {
 			return new Response("Missing or invalid second hemistich", { status: 400 });
 		}
 
@@ -82,10 +74,10 @@ export const POST: RequestHandler = async ({ locals, platform, request }) => {
 				line.heading,
 				line.headingText ?? null,
 				line.numberListed ?? null,
-				line.hemistichOne ? line.hemistichOne.text : null,
-				line.hemistichOne ? line.hemistichOne.hasNotes : null,
-				line.hemistichTwo ? line.hemistichTwo.text : null,
-				line.hemistichTwo ? line.hemistichTwo.hasNotes : null,
+				line.hemistichOne.text ?? null,
+				line.hemistichOne.hasNotes ?? null,
+				line.hemistichTwo.text ?? null,
+				line.hemistichTwo.hasNotes ?? null,
 			),
 	);
 
