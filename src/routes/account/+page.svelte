@@ -14,8 +14,7 @@
 
 	onMount(() => {
 		if (myPages.length === 0) {
-			myPages.push({ vol: "N/A", pg: "N/A" });
-			myPages.push({ vol: "N/A", pg: "N/A" }); // To test layout
+			myPages.push({ vol: "N/A", pg: "N/A" }, { vol: "N/A", pg: "N/A" });
 		}
 	});
 </script>
