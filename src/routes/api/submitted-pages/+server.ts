@@ -1,13 +1,7 @@
 import type { RequestHandler } from "@sveltejs/kit";
 import type { PageNumber } from "$lib/utils";
 
-export const GET: RequestHandler = async ({ locals, platform, request }) => {
-	// Same origin only
-	const origin = request.headers.get("origin");
-	if (!origin || origin !== "https://shahnama-transcription.pages.dev") {
-		return new Response("Invalid origin", { status: 403 });
-	}
-
+export const GET: RequestHandler = async ({ locals, platform }) => {
 	// Committers only
 	const editor = locals.user?.shortName;
 	if (!editor) return new Response("User not authorized", { status: 403 });
