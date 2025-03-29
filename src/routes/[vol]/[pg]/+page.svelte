@@ -1,50 +1,46 @@
 <script lang="ts">
+	import { onMount } from "svelte";
 	import { page } from "$app/state";
 	import { goto } from "$app/navigation";
-	import { onMount } from "svelte";
-	import { maxPages, normalizeLines, type Line } from "$lib/utils";
+	import { createLines, maxPages, normalizeLines, type Line } from "$lib/utils";
 	import type { PageProps } from "./$types";
 
-	let volNumber = parseInt(page.params.vol);
-	let pgNumber = parseInt(page.params.pg);
+	const volNumber = parseInt(page.params.vol);
+	const pgNumber = parseInt(page.params.pg);
 
-	let lines: Line[] = $state([]);
 	let lineCount = $state(0);
 	let lineCountConfirmed = $state(false);
+	let lines: Line[] = $state([]);
+	let showTranscription = $state(false);
+
+	let { data }: PageProps = $props();
+	const committer = typeof data.shortName === "string" && data.shortName.length > 0;
 
 	function confirmLineCount() {
 		if (lineCount < 1 || lineCount > 25) return;
 
 		lineCountConfirmed = true;
 		showTranscription = true;
-
-		lines = Array.from({ length: lineCount }, (_, i) => ({
-			heading: false,
-			numberWithinPage: i + 1,
-			hemistichOne: {},
-			hemistichTwo: {},
-		}));
+		lines = createLines(lineCount);
 
 		localStorage.setItem(`lineCount-${volNumber}-${pgNumber}`, lineCount.toString());
 		localStorage.setItem(`lines-${volNumber}-${pgNumber}`, JSON.stringify(lines));
 	}
-
-	let showTranscription = $state(false);
 
 	function handleKeydown(e: KeyboardEvent) {
 		if (e.key === "\\" && lineCountConfirmed) showTranscription = !showTranscription;
 	}
 
 	function resetLines() {
-		lineCountConfirmed = false;
-		lineCount = 0;
-		showTranscription = false;
+		[lineCount, lineCountConfirmed] = [0, false];
 		lines = [];
+		showTranscription = false;
 
 		localStorage.removeItem(`lineCount-${volNumber}-${pgNumber}`);
 		localStorage.removeItem(`lines-${volNumber}-${pgNumber}`);
 	}
 
+	// Non-committers can download transcriptions in JSON
 	function downloadLines() {
 		lines = normalizeLines(lines);
 		const data = JSON.stringify(lines, null, 2);
@@ -62,6 +58,7 @@
 		URL.revokeObjectURL(url);
 	}
 
+	// Committers can save their transcriptions to the DB
 	async function submitLines() {
 		lines = normalizeLines(lines);
 
@@ -85,31 +82,65 @@
 		}
 	}
 
-	let { data }: PageProps = $props();
-	const committer = typeof data.shortName === "string" && data.shortName.length > 0;
+	onMount(async () => {
+		if (volNumber < 1 || volNumber > 8) return goto("/");
+		if (pgNumber < 3 || pgNumber > maxPages[volNumber]) return goto("/");
 
-	onMount(() => {
-		if (!volNumber || volNumber < 1 || volNumber > 8) goto("/");
-		if (!pgNumber || pgNumber < 3 || pgNumber > maxPages[volNumber]) goto("/");
+		try {
+			const params = new URLSearchParams({
+				vol: volNumber.toString(),
+				pg: pgNumber.toString(),
+			}).toString();
 
-		const storedLineCount = localStorage.getItem(`lineCount-${volNumber}-${pgNumber}`);
-		if (storedLineCount) {
-			lineCount = parseInt(storedLineCount);
+			const res = await fetch(`/api/submitted-page?${params}`);
+			if (!res.ok) throw new Error(`${res.status}: ${await res.text()}`);
+
+			const dbLines: Line[] = await res.json();
+			lines = dbLines;
+
+			lineCount = dbLines.length;
 			lineCountConfirmed = true;
 			showTranscription = true;
+
+			localStorage.setItem(`lineCount-${volNumber}-${pgNumber}`, lineCount.toString());
+			localStorage.setItem(`lines-${volNumber}-${pgNumber}`, JSON.stringify(lines));
+
+			return;
+		} catch (err) {
+			if (err instanceof Error && !err.message.startsWith("404")) console.error(err.message);
+			else console.error(err);
 		}
 
-		const storedLines = localStorage.getItem(`lines-${volNumber}-${pgNumber}`);
-		if (storedLines) {
-			lines = JSON.parse(storedLines);
-		} else if (lineCountConfirmed) {
-			lines = Array.from({ length: lineCount }, (_, i) => ({
-				heading: false,
-				numberWithinPage: i + 1,
-				hemistichOne: {},
-				hemistichTwo: {},
-			}));
+		// Handle localStorage if the API call came back empty
+
+		const lsLineCount = localStorage.getItem(`lineCount-${volNumber}-${pgNumber}`);
+		if (!lsLineCount) {
+			resetLines();
+			return;
 		}
+
+		const storedLineCount = parseInt(lsLineCount);
+		if (storedLineCount < 1 || storedLineCount > 25) {
+			resetLines();
+			return;
+		}
+
+		const lsLines = localStorage.getItem(`lines-${volNumber}-${pgNumber}`);
+		if (!lsLines) {
+			resetLines();
+			return;
+		}
+
+		const storedLines: Line[] = JSON.parse(lsLines);
+		if (storedLines.length === 0 || storedLines.length !== storedLineCount) {
+			resetLines();
+			return;
+		}
+
+		// If all looks good...
+		[lineCount, lineCountConfirmed] = [storedLineCount, true];
+		lines = storedLines;
+		showTranscription = true;
 	});
 </script>
 

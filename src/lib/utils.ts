@@ -40,6 +40,15 @@ export const maxPages: Record<number, number> = {
 // FUNCTIONS
 //
 
+export function createLines(count: number): Line[] {
+	return Array.from({ length: count }, (_, i) => ({
+		heading: false,
+		numberWithinPage: i + 1,
+		hemistichOne: {},
+		hemistichTwo: {},
+	}));
+}
+
 export function normalizeLines(lines: Line[]): Line[] {
 	const cleaned: Line[] = [];
 
