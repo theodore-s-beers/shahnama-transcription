@@ -11,7 +11,8 @@
 	onMount(async () => {
 		try {
 			const res = await fetch("/api/submitted-pages", { credentials: "same-origin" });
-			if (res.ok) myPages = await res.json();
+			if (!res.ok) throw new Error(`${res.status}: ${await res.text()}`);
+			myPages = await res.json();
 		} catch (err) {
 			if (err instanceof Error) console.error(err.message);
 			else console.error(err);
