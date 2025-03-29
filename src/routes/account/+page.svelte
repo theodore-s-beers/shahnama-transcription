@@ -14,6 +14,7 @@
 
 	onMount(() => {
 		if (myPages.length === 0) {
+			// Push two placeholders to test layout
 			myPages.push({ vol: "N/A", pg: "N/A" }, { vol: "N/A", pg: "N/A" });
 		}
 	});
@@ -30,7 +31,7 @@
 	<div class="mb-4">Pages you have submitted:</div>
 
 	<ul class="list-inside list-disc">
-		{#each myPages as { vol, pg } (pg)}
+		{#each myPages as { vol, pg }, i (i)}
 			<li>vol. {vol}, pg. {pg}</li>
 		{/each}
 	</ul>
