@@ -34,7 +34,7 @@
 	<div class="mb-4 flex items-center">
 		<label for="vol" class="w-20 font-semibold">Volume</label>
 		<input
-			name="vol"
+			id="vol"
 			type="number"
 			bind:value={vol}
 			min="1"
@@ -49,7 +49,7 @@
 	<div class="mb-4 flex items-center">
 		<label for="pg" class="w-20 font-semibold">Page</label>
 		<input
-			name="pg"
+			id="pg"
 			type="number"
 			bind:value={pg}
 			min="3"

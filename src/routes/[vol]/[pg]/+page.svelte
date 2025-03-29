@@ -179,7 +179,7 @@
 	<div class="mb-6 flex items-center">
 		<label for="lines-count" class="w-16 font-semibold">Lines</label>
 		<input
-			name="lines-count"
+			id="lines-count"
 			type="number"
 			bind:value={lineCount}
 			min="0"
