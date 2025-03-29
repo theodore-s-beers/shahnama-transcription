@@ -14,10 +14,8 @@
 
 	onMount(() => {
 		if (myPages.length === 0) {
-			myPages.push({
-				vol: "N/A",
-				pg: "N/A",
-			});
+			myPages.push({ vol: "N/A", pg: "N/A" });
+			myPages.push({ vol: "N/A", pg: "N/A" }); // To test layout
 		}
 	});
 </script>
@@ -30,9 +28,9 @@
 
 	<div class="mb-6 text-4xl">User Account: {shortName}</div>
 
-	<div>Pages you have submitted:</div>
+	<div class="mb-4">Pages you have submitted:</div>
 
-	<ul class="list-disc">
+	<ul class="list-inside list-disc">
 		{#each myPages as { vol, pg } (pg)}
 			<li>vol. {vol}, pg. {pg}</li>
 		{/each}
