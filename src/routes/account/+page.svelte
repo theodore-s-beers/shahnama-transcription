@@ -10,7 +10,7 @@
 
 	onMount(async () => {
 		try {
-			const res = await fetch("/api/submitted-pages");
+			const res = await fetch("/api/submitted-pages", { credentials: "same-origin" });
 			if (res.ok) myPages = await res.json();
 		} catch (err) {
 			if (err instanceof Error) console.error(err.message);
