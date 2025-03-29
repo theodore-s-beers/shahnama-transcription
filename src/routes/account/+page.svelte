@@ -32,7 +32,9 @@
 
 	<ul class="list-inside list-disc">
 		{#each myPages as { vol, pg } (`${vol}-${pg}`)}
-			<li>vol. {vol}, pg. {pg}</li>
+			<li>
+				<a href={`/${vol}/${pg}`} class="text-blue-800 hover:underline">vol. {vol}, pg. {pg}</a>
+			</li>
 		{/each}
 	</ul>
 </div>
