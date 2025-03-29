@@ -25,5 +25,6 @@ CREATE TABLE line (
     hemistich_one_notes INTEGER,
     hemistich_two_text TEXT,
     hemistich_two_notes INTEGER,
-    FOREIGN KEY (editor) REFERENCES user(short_name)
+    FOREIGN KEY (editor) REFERENCES user(short_name),
+    UNIQUE (volume_number, page_number, number_within_page, editor)
 );
