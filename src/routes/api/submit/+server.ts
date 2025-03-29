@@ -60,7 +60,7 @@ export const POST: RequestHandler = async ({ locals, platform, request }) => {
       hemistich_one_text, hemistich_one_notes,
       hemistich_two_text, hemistich_two_notes
     )
-    VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)
+    VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11);
   `;
 
 	const statements = lines.map((line) =>

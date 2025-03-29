@@ -2,6 +2,11 @@
 // TYPES
 //
 
+export interface PageNumber {
+	vol: number;
+	pg: number;
+}
+
 export interface Line {
 	heading: boolean;
 	headingText?: string;
