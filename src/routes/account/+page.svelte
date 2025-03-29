@@ -26,7 +26,7 @@
 		<div><a href="/logout" class="text-blue-800 hover:underline">Sign out</a></div>
 	</div>
 
-	<div class="mb-6 text-4xl">User Account: {shortName}</div>
+	<div class="mb-6 text-4xl">User Account: <span class="text-green-700">{shortName}</span></div>
 
 	<div class="mb-4">Pages you have submitted (and can always update if needed):</div>
 
