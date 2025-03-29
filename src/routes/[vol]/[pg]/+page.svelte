@@ -123,7 +123,7 @@
 
 		{#if committer}
 			<div>
-				Signed in: <a href="/logout" class="text-green-700 hover:underline">{data.shortName}</a>
+				Signed in: <a href="/account" class="text-green-700 hover:underline">{data.shortName}</a>
 			</div>
 		{:else if data.username}
 			<div>
