@@ -60,7 +60,16 @@ export const POST: RequestHandler = async ({ locals, platform, request }) => {
       hemistich_one_text, hemistich_one_notes,
       hemistich_two_text, hemistich_two_notes
     )
-    VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11);
+    VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)
+    ON CONFLICT (volume_number, page_number, number_within_page, editor)
+    DO UPDATE SET
+      heading = excluded.heading,
+      heading_text = excluded.heading_text,
+      number_listed = excluded.number_listed,
+      hemistich_one_text = excluded.hemistich_one_text,
+      hemistich_one_notes = excluded.hemistich_one_notes,
+      hemistich_two_text = excluded.hemistich_two_text,
+      hemistich_two_notes = excluded.hemistich_two_notes;
   `;
 
 	const statements = lines.map((line) =>
@@ -83,7 +92,7 @@ export const POST: RequestHandler = async ({ locals, platform, request }) => {
 
 	try {
 		await db.batch(statements);
-		return new Response(null, { status: 201 });
+		return new Response(null, { status: 200 }); // Not 201; it's an upsert
 	} catch (err) {
 		if (err instanceof Error) console.error(err.message);
 		else console.error(err);
