@@ -229,23 +229,27 @@
 						localStorage.setItem(`lines-${volNumber}-${pgNumber}`, JSON.stringify(lines))}
 				>
 					<div class="flex flex-col">
-						<input type="checkbox" name="heading-check" bind:checked={line.heading} />
-						<label for="heading-check">ع</label>
+						<input
+							type="checkbox"
+							id={`heading-check-${line.numberWithinPage}`}
+							bind:checked={line.heading}
+						/>
+						<label for={`heading-check-${line.numberWithinPage}`}>ع</label>
 					</div>
 					{#if line.heading}
 						<div class="flex grow flex-col">
 							<input
-								name="heading-text"
+								id={`heading-text-${line.numberWithinPage}`}
 								type="text"
 								class="rounded border border-black p-2"
 								bind:value={line.headingText}
 							/>
-							<label for="heading-text" class="self-center">عنوان</label>
+							<label for={`heading-text-${line.numberWithinPage}`} class="self-center">عنوان</label>
 						</div>
 					{:else}
 						<div class="flex flex-col">
 							<input
-								name="line-number"
+								id={`line-number-${line.numberWithinPage}`}
 								type="number"
 								class="w-20 rounded border border-black p-2 invalid:bg-red-100"
 								min="5"
@@ -254,41 +258,45 @@
 								dir="ltr"
 								bind:value={line.numberListed}
 							/>
-							<label for="line-number" class="self-center">ش</label>
+							<label for={`line-number-${line.numberWithinPage}`} class="self-center">ش</label>
 						</div>
 						<div class="flex grow flex-col">
 							<input
-								name="hem-one-text"
+								id={`hem-one-text-${line.numberWithinPage}`}
 								type="text"
 								class="rounded border border-black p-2"
 								bind:value={line.hemistichOne!.text}
 							/>
-							<label for="hem-one-text" class="self-center">مصراع اول</label>
+							<label for={`hem-one-text-${line.numberWithinPage}`} class="self-center">
+								مصراع اول
+							</label>
 						</div>
 						<div class="flex flex-col">
 							<input
-								name="hem-one-notes"
+								id={`hem-one-notes-${line.numberWithinPage}`}
 								type="checkbox"
 								bind:checked={line.hemistichOne!.hasNotes}
 							/>
-							<label for="hem-one-notes">ح</label>
+							<label for={`hem-one-notes-${line.numberWithinPage}`}>ح</label>
 						</div>
 						<div class="flex grow flex-col">
 							<input
-								name="hem-two-text"
+								id={`hem-two-text-${line.numberWithinPage}`}
 								type="text"
 								class="rounded border border-black p-2"
 								bind:value={line.hemistichTwo!.text}
 							/>
-							<label for="hem-two-text" class="self-center">مصراع دوم</label>
+							<label for={`hem-two-text-${line.numberWithinPage}`} class="self-center">
+								مصراع دوم
+							</label>
 						</div>
 						<div class="flex flex-col">
 							<input
-								name="hem-two-notes"
+								id={`hem-two-notes-${line.numberWithinPage}`}
 								type="checkbox"
 								bind:checked={line.hemistichTwo!.hasNotes}
 							/>
-							<label for="hem-two-notes">ح</label>
+							<label for={`hem-two-notes-${line.numberWithinPage}`}>ح</label>
 						</div>
 					{/if}
 				</div>
@@ -301,7 +309,7 @@
 
 		<img
 			src={`/km/${volNumber}-${String(pgNumber).padStart(3, "0")}.png`}
-			alt="A page from the Shahnama"
+			alt="A page from the Shāhnāma"
 			class="rounded border border-black"
 		/>
 	{/if}
