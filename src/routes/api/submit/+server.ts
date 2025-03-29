@@ -9,8 +9,8 @@ export const POST: RequestHandler = async ({ locals, platform, request }) => {
 	}
 
 	// Committers only
-	const user = locals.user;
-	if (!user || !user.shortName) return new Response("User not authorized", { status: 403 });
+	const editor = locals.user?.shortName;
+	if (!editor) return new Response("User not authorized", { status: 403 });
 
 	// Volume and page required as query params
 	const params = new URL(request.url).searchParams;
@@ -70,7 +70,7 @@ export const POST: RequestHandler = async ({ locals, platform, request }) => {
 				vol,
 				pg,
 				line.numberWithinPage,
-				user.shortName,
+				editor,
 				line.heading,
 				line.headingText ?? null,
 				line.numberListed ?? null,
