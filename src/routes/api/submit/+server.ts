@@ -53,28 +53,55 @@ export const POST: RequestHandler = async ({ locals, platform, request }) => {
 
 	const db = platform!.env.DB;
 
-	const sql = `
-    INSERT INTO line (
-      volume_number, page_number, number_within_page,
-      editor, heading, heading_text, number_listed,
-      hemistich_one_text, hemistich_one_notes,
-      hemistich_two_text, hemistich_two_notes
-    )
-    VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)
-    ON CONFLICT (volume_number, page_number, number_within_page, editor)
-    DO UPDATE SET
-      heading = excluded.heading,
-      heading_text = excluded.heading_text,
-      number_listed = excluded.number_listed,
-      hemistich_one_text = excluded.hemistich_one_text,
-      hemistich_one_notes = excluded.hemistich_one_notes,
-      hemistich_two_text = excluded.hemistich_two_text,
-      hemistich_two_notes = excluded.hemistich_two_notes;
-  `;
+	// Check number of lines for this page/editor currently in DB
+	// This is to handle a niche case where a user submits a page with fewer lines
+	// than previously submitted. We then need to delete the existing lines before
+	// inserting the new ones. Otherwise orphan lines would be left in the DB.
+
+	const checkSql = `
+    	SELECT COUNT(*)
+    	FROM line
+    	WHERE volume_number = ?1 AND page_number = ?2 AND editor = ?3;
+  	`;
+
+	const checkStmt = db.prepare(checkSql).bind(vol, pg, editor);
+	const currentCount = await checkStmt.first<number>();
+
+	if (currentCount && currentCount > lines.length) {
+		const deleteSql = `
+      		DELETE FROM line
+      		WHERE volume_number = ?1 AND page_number = ?2 AND editor = ?3;
+    	`;
+
+		const deleteStmt = db.prepare(deleteSql).bind(vol, pg, editor);
+		const { success } = await deleteStmt.run();
+		if (!success) return new Response("Failed to delete existing lines", { status: 500 });
+	}
+
+	// Proceeding with business as usual...
+
+	const upsertSql = `
+    	INSERT INTO line (
+      		volume_number, page_number, number_within_page,
+      		editor, heading, heading_text, number_listed,
+      		hemistich_one_text, hemistich_one_notes,
+      		hemistich_two_text, hemistich_two_notes
+    	)
+    	VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)
+    	ON CONFLICT (volume_number, page_number, number_within_page, editor)
+    	DO UPDATE SET
+      		heading = excluded.heading,
+      		heading_text = excluded.heading_text,
+      		number_listed = excluded.number_listed,
+      		hemistich_one_text = excluded.hemistich_one_text,
+      		hemistich_one_notes = excluded.hemistich_one_notes,
+      		hemistich_two_text = excluded.hemistich_two_text,
+      		hemistich_two_notes = excluded.hemistich_two_notes;
+  	`;
 
 	const statements = lines.map((line) =>
 		db
-			.prepare(sql)
+			.prepare(upsertSql)
 			.bind(
 				vol,
 				pg,

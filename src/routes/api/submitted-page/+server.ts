@@ -26,19 +26,19 @@ export const GET: RequestHandler = async ({ locals, platform, request }) => {
 	const db = platform!.env.DB;
 
 	const sql = `
-    SELECT
-      number_within_page,
-      heading,
-      heading_text,
-      number_listed,
-      hemistich_one_text,
-      hemistich_one_notes,
-      hemistich_two_text,
-      hemistich_two_notes
-    FROM line
-    WHERE volume_number = $1 AND page_number = $2 AND editor = $3
-    ORDER BY number_within_page;
-  `;
+    	SELECT
+      		number_within_page,
+      		heading,
+      		heading_text,
+      		number_listed,
+      		hemistich_one_text,
+      		hemistich_one_notes,
+      		hemistich_two_text,
+      		hemistich_two_notes
+    	FROM line
+    	WHERE volume_number = $1 AND page_number = $2 AND editor = $3
+    	ORDER BY number_within_page;
+  	`;
 
 	const stmt = db.prepare(sql).bind(vol, pg, editor);
 	const { results } = await stmt.all<RawLine>();
