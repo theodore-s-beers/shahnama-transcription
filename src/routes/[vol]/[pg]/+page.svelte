@@ -176,7 +176,9 @@
 				<em>key to switch between viewing the page image and the transcription.</em>
 			</p>
 			<p>
-				To change the number of lines after setting it, you must clear the current transcription.
+				<em>
+					To change the number of lines after setting it, you must clear the current transcription.
+				</em>
 			</p>
 		</div>
 	{/if}
