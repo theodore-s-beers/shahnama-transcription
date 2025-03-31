@@ -171,13 +171,18 @@
 
 	{#if lineCountConfirmed}
 		<div class="mb-6">
-			<em>Use the</em> <strong>\</strong>
-			<em>key to switch between viewing the page image and the transcription.</em>
+			<p>
+				<em>Use the</em> <strong>\</strong>
+				<em>key to switch between viewing the page image and the transcription.</em>
+			</p>
+			<p>
+				To change the number of lines after setting it, you must clear the current transcription.
+			</p>
 		</div>
 	{/if}
 
 	<div class="mb-6 flex items-center">
-		<label for="lines-count" class="w-16 font-semibold">Lines</label>
+		<label for="lines-count" class="w-16 font-semibold">No. of lines</label>
 		<input
 			id="lines-count"
 			type="number"
@@ -207,11 +212,11 @@
 				onclick={committer ? submitLines : downloadLines}
 				class="cursor-pointer rounded bg-green-800 px-3 py-2 text-white"
 			>
-				{committer ? "Submit" : "Download"}
+				{committer ? "Save" : "Download"}
 			</button>
 
 			<button onclick={resetLines} class="cursor-pointer rounded bg-red-800 px-3 py-2 text-white">
-				Reset
+				Clear
 			</button>
 		</div>
 
