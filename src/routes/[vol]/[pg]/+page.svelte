@@ -182,7 +182,7 @@
 	{/if}
 
 	<div class="mb-6 flex items-center">
-		<label for="lines-count" class="font-semibold">No. of lines</label>
+		<label for="lines-count" class="mr-4 font-semibold">No. of lines</label>
 		<input
 			id="lines-count"
 			type="number"
