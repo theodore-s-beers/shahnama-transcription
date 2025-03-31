@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72">
+  <path fill="#FFF" d="M4 51.62h64v7.27H4z"/>
+  <circle cx="36" cy="16.01" r="5" fill="#FFF"/>
+  <path fill="#F1B31C" d="M4 51.62h64v7.27H4z"/>
+  <path fill="#FCEA2B" d="M7 11a5 5 0 0 1 0 10M65 21a5 5 0 0 1 0-10"/>
+  <path fill="#FCEA2B" d="M64.97 17.5c0 9.08-7.36 16.44-16.45 16.44h-.28c-9.08 0-11.44-7.36-11.44-16.45h-2.08c0 9.09-2.36 16.45-11.44 16.45h.16A16.42 16.42 0 0 1 7 17.49V11v40.62h58V11"/>
+  <circle cx="36" cy="16.01" r="5" fill="#FCEA2B"/>
+  <g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2">
+    <path d="M4 51.62h64v7.27H4zM7 11v40.62h58V11"/>
+    <path d="M7 11a5 5 0 0 1 0 10"/>
+    <path d="M23.44 33.94A16.42 16.42 0 0 1 7 17.49M64.97 17.5c0 9.08-7.36 16.44-16.45 16.44"/>
+    <circle cx="36" cy="16.01" r="5"/>
+    <path d="M65 21a5 5 0 0 1 0-10M4 51.62h64v7.27H4zM7 11a5 5 0 0 1 0 10"/>
+    <path d="M65 21a5 5 0 0 1 0-10"/>
+    <path d="M34.6 20.87c-.6 7.46-3.4 13.07-11.32 13.07h.16A16.42 16.42 0 0 1 7 17.49V11v40.62h58V11"/>
+    <path d="M64.97 17.5c0 9.08-7.36 16.44-16.45 16.44h-.28c-7.9 0-10.72-5.58-11.32-13.02"/>
+    <circle cx="36" cy="16.01" r="5"/>
+  </g>
+</svg>
