@@ -76,10 +76,11 @@
 			});
 
 			if (!res.ok) throw new Error(`${res.status}: ${await res.text()}`);
-			toast.success("Transcription saved successfully!");
+			toast.success("Transcription saved successfully");
 		} catch (err) {
 			if (err instanceof Error) console.error(err.message);
 			else console.error(err);
+			toast.error("Failed to save transcription (see console for error message)");
 		}
 	}
 
@@ -180,7 +181,8 @@
 			</p>
 			<p>
 				<em>
-					To change the number of lines after setting it, you must clear the current transcription.
+					To change the number of lines after setting it, you must clear your current work on this
+					page.
 				</em>
 			</p>
 		</div>
