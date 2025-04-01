@@ -227,7 +227,7 @@
 			</button>
 
 			{#if savedLines}
-				<div>(This clears current work, <em>not</em> any saved transcription)</div>
+				<div>(“Save” updates the DB; “Clear” affects <em>only</em> current work)</div>
 			{/if}
 		</div>
 
