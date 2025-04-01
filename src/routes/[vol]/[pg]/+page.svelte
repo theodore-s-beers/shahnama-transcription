@@ -187,7 +187,7 @@
 				<strong class="not-italic">\</strong>
 			</p>
 			<p>
-				To change the line count after setting it, you must clear your current work on this page
+				To change the line count after setting it, you must clear your current work on this page.
 			</p>
 		</div>
 	{/if}
@@ -231,7 +231,7 @@
 			</button>
 
 			{#if savedLines}
-				<div>(“Save” updates the DB; “Clear” affects <em>only</em> current work)</div>
+				<div>(“Save” updates the DB; “Clear” affects <em>only</em> current work.)</div>
 			{/if}
 		</div>
 
