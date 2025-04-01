@@ -13,6 +13,7 @@
 	let lineCountConfirmed = $state(false);
 	let lines: Line[] = $state([]);
 	let showTranscription = $state(false);
+	let savedLines = $state(false);
 
 	let { data }: PageProps = $props();
 	const committer = typeof data.shortName === "string" && data.shortName.length > 0;
@@ -76,6 +77,7 @@
 			});
 
 			if (!res.ok) throw new Error(`${res.status}: ${await res.text()}`);
+			savedLines = true;
 			toast.success("Transcription saved successfully");
 		} catch (err) {
 			if (err instanceof Error) console.error(err.message);
@@ -103,6 +105,7 @@
 			lineCount = dbLines.length;
 			lineCountConfirmed = true;
 			showTranscription = true;
+			savedLines = true;
 
 			localStorage.setItem(`lineCount-${volNumber}-${pgNumber}`, lineCount.toString());
 			localStorage.setItem(`lines-${volNumber}-${pgNumber}`, JSON.stringify(lines));
@@ -174,16 +177,13 @@
 	</div>
 
 	{#if lineCountConfirmed}
-		<div class="mb-6">
+		<div class="mb-6 italic">
 			<p>
-				<em>Use the</em> <strong>\</strong>
-				<em>key to switch between viewing the page image and the transcription.</em>
+				To switch between viewing the page image and the transcription:
+				<strong class="not-italic">\</strong>
 			</p>
 			<p>
-				<em>
-					To change the number of lines after setting it, you must clear your current work on this
-					page.
-				</em>
+				To change the line count after setting it, you must clear your current work on this page.
 			</p>
 		</div>
 	{/if}
@@ -225,6 +225,10 @@
 			<button onclick={resetLines} class="cursor-pointer rounded bg-red-800 px-3 py-2 text-white">
 				Clear
 			</button>
+
+			{#if savedLines}
+				<div>(This clears current work, <em>not</em> any saved transcription.)</div>
+			{/if}
 		</div>
 
 		<hr class="mb-6 border border-dashed border-black" />
