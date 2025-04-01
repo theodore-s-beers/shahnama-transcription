@@ -33,7 +33,13 @@
 
 	<div class="mb-6 text-4xl">Transcribe the <em>Shāhnāma</em></div>
 
-	<div class="mb-6">Choose a volume and page.</div>
+	<div class="mb-6">
+		<p>Please choose a volume and page to transcribe.</p>
+		<p>
+			We are currently working on the story of Rustam and Suhrāb, which starts at 2:117 and ends at
+			2:199.
+		</p>
+	</div>
 
 	<div class="mb-4 flex items-center">
 		<label for="vol" class="w-20 font-semibold">Volume</label>
