@@ -183,7 +183,7 @@
 				<strong class="not-italic">\</strong>
 			</p>
 			<p>
-				To change the line count after setting it, you must clear your current work on this page.
+				To change the line count after setting it, you must clear your current work on this page
 			</p>
 		</div>
 	{/if}
@@ -214,7 +214,7 @@
 	</div>
 
 	{#if lineCountConfirmed && showTranscription}
-		<div class="-mt-2 mb-6 ml-16 flex gap-4">
+		<div class="-mt-2 mb-6 ml-16 flex items-center gap-4">
 			<button
 				onclick={committer ? submitLines : downloadLines}
 				class="cursor-pointer rounded bg-green-800 px-3 py-2 text-white"
@@ -227,7 +227,7 @@
 			</button>
 
 			{#if savedLines}
-				<div>(This clears current work, <em>not</em> any saved transcription.)</div>
+				<div>(This clears current work, <em>not</em> any saved transcription)</div>
 			{/if}
 		</div>
 
