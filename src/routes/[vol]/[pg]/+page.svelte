@@ -1,4 +1,5 @@
 <script lang="ts">
+	import toast, { Toaster } from "svelte-french-toast";
 	import { onMount } from "svelte";
 	import { page } from "$app/state";
 	import { goto } from "$app/navigation";
@@ -75,7 +76,7 @@
 			});
 
 			if (!res.ok) throw new Error(`${res.status}: ${await res.text()}`);
-			console.log("Success");
+			toast.success("Transcription saved successfully!");
 		} catch (err) {
 			if (err instanceof Error) console.error(err.message);
 			else console.error(err);
@@ -145,6 +146,8 @@
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
+
+<Toaster />
 
 <div class="mx-auto max-w-7xl p-4 text-lg">
 	<div class="mb-3 flex justify-end">

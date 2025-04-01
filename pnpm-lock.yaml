@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      svelte-french-toast:
+        specifier: ^1.2.0
+        version: 1.2.0(svelte@5.25.5)
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20250327.0
@@ -1707,6 +1711,16 @@ packages:
       svelte:
         optional: true
 
+  svelte-french-toast@1.2.0:
+    resolution: {integrity: sha512-5PW+6RFX3xQPbR44CngYAP1Sd9oCq9P2FOox4FZffzJuZI2mHOB7q5gJBVnOiLF5y3moVGZ7u2bYt7+yPAgcEQ==}
+    peerDependencies:
+      svelte: ^3.57.0 || ^4.0.0
+
+  svelte-writable-derived@3.1.1:
+    resolution: {integrity: sha512-w4LR6/bYZEuCs7SGr+M54oipk/UQKtiMadyOhW0PTwAtJ/Ai12QS77sLngEcfBx2q4H8ZBQucc9ktSA5sUGZWw==}
+    peerDependencies:
+      svelte: ^3.2.1 || ^4.0.0-next.1 || ^5.0.0-next.94
+
   svelte@5.25.5:
     resolution: {integrity: sha512-ULi9rkVWQJyJYZSpy6SIgSTchWadyWG1QYAUx3JAXL2gXrnhdXtoB20KmXGSNdtNyquq3eYd/gkwAkLcL5PGWw==}
     engines: {node: '>=18'}
@@ -3256,6 +3270,15 @@ snapshots:
       postcss-scss: 4.0.9(postcss@8.5.3)
       postcss-selector-parser: 7.1.0
     optionalDependencies:
+      svelte: 5.25.5
+
+  svelte-french-toast@1.2.0(svelte@5.25.5):
+    dependencies:
+      svelte: 5.25.5
+      svelte-writable-derived: 3.1.1(svelte@5.25.5)
+
+  svelte-writable-derived@3.1.1(svelte@5.25.5):
+    dependencies:
       svelte: 5.25.5
 
   svelte@5.25.5:

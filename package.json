@@ -13,6 +13,9 @@
 		"lint": "prettier --check . && eslint .",
 		"preview": "npm run build && wrangler pages dev"
 	},
+	"dependencies": {
+		"svelte-french-toast": "^1.2.0"
+	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20250327.0",
 		"@eslint/js": "^9.23.0",
