@@ -82,7 +82,7 @@
 		} catch (err) {
 			if (err instanceof Error) console.error(err.message);
 			else console.error(err);
-			toast.error("Failed to save transcription (see console for error message)");
+			toast.error("Failed to save (see console)");
 		}
 	}
 
