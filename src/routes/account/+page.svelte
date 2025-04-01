@@ -20,6 +20,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>User Account: {shortName}</title>
+</svelte:head>
+
 <div class="mx-auto max-w-7xl p-4 text-lg">
 	<div class="mb-3 flex justify-end">
 		<div class="mr-8"><a href="/" class="text-blue-800 hover:underline">Home</a></div>

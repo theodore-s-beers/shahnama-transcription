@@ -151,6 +151,10 @@
 
 <svelte:window on:keydown={handleKeydown} />
 
+<svelte:head>
+	<title>Transcribe the Shāhnāma – vol. {volNumber}, pg. {pgNumber}</title>
+</svelte:head>
+
 <Toaster />
 
 <div class="mx-auto max-w-7xl p-4 text-lg">

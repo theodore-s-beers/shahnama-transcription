@@ -12,6 +12,10 @@
 	const committer = typeof data.shortName === "string" && data.shortName.length > 0;
 </script>
 
+<svelte:head>
+	<title>Transcribe the Shāhnāma</title>
+</svelte:head>
+
 <div class="mx-auto max-w-7xl p-4 text-lg">
 	<div class="mb-3 flex justify-end">
 		{#if committer}
