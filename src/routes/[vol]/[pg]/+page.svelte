@@ -96,7 +96,7 @@
 				pg: pgNumber.toString(),
 			}).toString();
 
-			const res = await fetch(`/api/submitted-page?${params}`);
+			const res = await fetch(`/api/saved-page?${params}`);
 			if (!res.ok) throw new Error(`${res.status}: ${await res.text()}`);
 
 			const dbLines: Line[] = await res.json();
