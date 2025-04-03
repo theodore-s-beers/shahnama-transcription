@@ -2,9 +2,9 @@
 // TYPES
 //
 
-export interface PageNumber {
-	vol: number;
-	pg: number;
+export interface Hemistich {
+	text?: string;
+	hasNotes?: boolean;
 }
 
 export interface Line {
@@ -16,9 +16,9 @@ export interface Line {
 	hemistichTwo: Hemistich;
 }
 
-interface Hemistich {
-	text?: string;
-	hasNotes?: boolean;
+export interface PageNumber {
+	vol: number;
+	pg: number;
 }
 
 //
