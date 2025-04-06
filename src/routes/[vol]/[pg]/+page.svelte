@@ -12,7 +12,7 @@
 	let lineCount = $state(0);
 	let lineCountConfirmed = $state(false);
 	let lines: Line[] = $state([]);
-	let showTranscription = $state(false);
+	let transcriptionFirst = $state(false);
 	let savedLines = $state(false);
 
 	let { data }: PageProps = $props();
@@ -22,7 +22,7 @@
 		if (lineCount < 1 || lineCount > 25) return;
 
 		lineCountConfirmed = true;
-		showTranscription = true;
+		transcriptionFirst = true;
 		lines = createLines(lineCount);
 
 		localStorage.setItem(`lineCount-${volNumber}-${pgNumber}`, lineCount.toString());
@@ -30,13 +30,13 @@
 	}
 
 	function handleKeydown(e: KeyboardEvent) {
-		if (e.key === "\\" && lineCountConfirmed) showTranscription = !showTranscription;
+		if (e.key === "\\" && lineCountConfirmed) transcriptionFirst = !transcriptionFirst;
 	}
 
 	function resetLines() {
 		[lineCount, lineCountConfirmed] = [0, false];
 		lines = [];
-		showTranscription = false;
+		transcriptionFirst = false;
 
 		localStorage.removeItem(`lineCount-${volNumber}-${pgNumber}`);
 		localStorage.removeItem(`lines-${volNumber}-${pgNumber}`);
@@ -104,7 +104,7 @@
 
 			lineCount = dbLines.length;
 			lineCountConfirmed = true;
-			showTranscription = true;
+			transcriptionFirst = true;
 			savedLines = true;
 
 			localStorage.setItem(`lineCount-${volNumber}-${pgNumber}`, lineCount.toString());
@@ -145,7 +145,7 @@
 		// If all looks good...
 		[lineCount, lineCountConfirmed] = [storedLineCount, true];
 		lines = storedLines;
-		showTranscription = true;
+		transcriptionFirst = true;
 	});
 </script>
 
@@ -157,7 +157,7 @@
 
 <Toaster />
 
-<div class="mx-auto max-w-7xl p-4 text-lg">
+<div class="mx-auto p-4 pb-6 text-lg">
 	<div class="mb-3 flex justify-end">
 		<div class="mr-8">
 			<a href="/" class="text-blue-800 hover:underline">Home</a>
@@ -182,8 +182,8 @@
 
 	{#if lineCountConfirmed}
 		<div class="mb-6 italic">
-			<p>
-				To switch between viewing the page image and the transcription:
+			<p class="2xl:hidden">
+				To swap the positions of the page image and the transcription:
 				<strong class="not-italic">\</strong>
 			</p>
 			<p>
@@ -217,7 +217,7 @@
 		</button>
 	</div>
 
-	{#if lineCountConfirmed && showTranscription}
+	{#if lineCountConfirmed}
 		<div class="-mt-2 mb-6 ml-16 flex items-center gap-4">
 			<button
 				onclick={committer ? submitLines : downloadLines}
@@ -234,103 +234,135 @@
 				<div>(“Save” updates the DB; “Clear” affects <em>only</em> current work.)</div>
 			{/if}
 		</div>
-
-		<hr class="mb-6 border border-dashed border-black" />
-
-		{#each lines as line, i (line.numberWithinPage)}
-			<div class="flex items-center">
-				<div class="w-9 font-semibold">{i + 1}</div>
-
-				<div
-					class="mb-4 flex grow items-center gap-4 rounded border border-black bg-white p-4"
-					dir="rtl"
-					spellcheck="false"
-					onchange={() =>
-						localStorage.setItem(`lines-${volNumber}-${pgNumber}`, JSON.stringify(lines))}
-				>
-					<div class="flex flex-col">
-						<input
-							type="checkbox"
-							id={`heading-check-${line.numberWithinPage}`}
-							bind:checked={line.heading}
-						/>
-						<label for={`heading-check-${line.numberWithinPage}`}>ع</label>
-					</div>
-					{#if line.heading}
-						<div class="flex grow flex-col">
-							<input
-								id={`heading-text-${line.numberWithinPage}`}
-								type="text"
-								class="rounded border border-black p-2"
-								bind:value={line.headingText}
-							/>
-							<label for={`heading-text-${line.numberWithinPage}`} class="self-center">عنوان</label>
-						</div>
-					{:else}
-						<div class="flex flex-col">
-							<input
-								id={`line-number-${line.numberWithinPage}`}
-								type="number"
-								class="w-20 rounded border border-black p-2 invalid:bg-red-100"
-								min="5"
-								max="995"
-								step="5"
-								dir="ltr"
-								bind:value={line.numberListed}
-							/>
-							<label for={`line-number-${line.numberWithinPage}`} class="self-center">ش</label>
-						</div>
-						<div class="flex grow flex-col">
-							<input
-								id={`hem-one-text-${line.numberWithinPage}`}
-								type="text"
-								class="rounded border border-black p-2"
-								bind:value={line.hemistichOne!.text}
-							/>
-							<label for={`hem-one-text-${line.numberWithinPage}`} class="self-center">
-								مصراع اول
-							</label>
-						</div>
-						<div class="flex flex-col">
-							<input
-								id={`hem-one-notes-${line.numberWithinPage}`}
-								type="checkbox"
-								bind:checked={line.hemistichOne!.hasNotes}
-							/>
-							<label for={`hem-one-notes-${line.numberWithinPage}`}>ح</label>
-						</div>
-						<div class="flex grow flex-col">
-							<input
-								id={`hem-two-text-${line.numberWithinPage}`}
-								type="text"
-								class="rounded border border-black p-2"
-								bind:value={line.hemistichTwo!.text}
-							/>
-							<label for={`hem-two-text-${line.numberWithinPage}`} class="self-center">
-								مصراع دوم
-							</label>
-						</div>
-						<div class="flex flex-col">
-							<input
-								id={`hem-two-notes-${line.numberWithinPage}`}
-								type="checkbox"
-								bind:checked={line.hemistichTwo!.hasNotes}
-							/>
-							<label for={`hem-two-notes-${line.numberWithinPage}`}>ح</label>
-						</div>
-					{/if}
-				</div>
-			</div>
-		{/each}
 	{/if}
 
-	{#if !showTranscription}
-		<hr class="mb-6 border border-dashed border-black" />
+	<hr class="mb-6 border border-dashed border-black" />
+
+	{#if !transcriptionFirst}
+		<div class="2xl:hidden">
+			<img
+				src={`/km/${volNumber}-${String(pgNumber).padStart(3, "0")}.png`}
+				alt="A page from the Shāhnāma"
+				class="rounded border border-black"
+			/>
+			<hr class="my-6 border border-dashed border-black" />
+		</div>
+	{/if}
+
+	<div class="2xl:flex 2xl:gap-4">
+		{#if lineCountConfirmed}
+			<div class="w-full space-y-4 2xl:w-1/2">
+				{#each lines as line, i (line.numberWithinPage)}
+					<div class="flex items-center">
+						<div class="w-9 font-semibold">{i + 1}</div>
+
+						<div
+							class="flex grow items-center gap-4 rounded border border-black bg-white p-4 pb-3"
+							dir="rtl"
+							spellcheck="false"
+							onchange={() =>
+								localStorage.setItem(`lines-${volNumber}-${pgNumber}`, JSON.stringify(lines))}
+						>
+							<div class="flex flex-col">
+								<input
+									type="checkbox"
+									id={`heading-check-${line.numberWithinPage}`}
+									bind:checked={line.heading}
+								/>
+								<label for={`heading-check-${line.numberWithinPage}`}>ع</label>
+							</div>
+
+							{#if line.heading}
+								<div class="flex grow flex-col">
+									<input
+										id={`heading-text-${line.numberWithinPage}`}
+										type="text"
+										class="rounded border border-black p-2"
+										bind:value={line.headingText}
+									/>
+									<label for={`heading-text-${line.numberWithinPage}`} class="self-center">
+										عنوان
+									</label>
+								</div>
+							{:else}
+								<div class="flex flex-col">
+									<input
+										id={`line-number-${line.numberWithinPage}`}
+										type="number"
+										class="w-20 rounded border border-black p-2 invalid:bg-red-100"
+										min="5"
+										max="995"
+										step="5"
+										dir="ltr"
+										bind:value={line.numberListed}
+									/>
+									<label for={`line-number-${line.numberWithinPage}`} class="self-center">ش</label>
+								</div>
+
+								<div class="flex grow flex-col">
+									<input
+										id={`hem-one-text-${line.numberWithinPage}`}
+										type="text"
+										class="rounded border border-black p-2"
+										bind:value={line.hemistichOne!.text}
+									/>
+									<label for={`hem-one-text-${line.numberWithinPage}`} class="self-center">
+										مصراع اول
+									</label>
+								</div>
+
+								<!-- This is vestigial and will eventually be removed -->
+								<div class="hidden">
+									<input
+										id={`hem-one-notes-${line.numberWithinPage}`}
+										type="checkbox"
+										bind:checked={line.hemistichOne!.hasNotes}
+									/>
+									<label for={`hem-one-notes-${line.numberWithinPage}`}>ح</label>
+								</div>
+
+								<div class="flex grow flex-col">
+									<input
+										id={`hem-two-text-${line.numberWithinPage}`}
+										type="text"
+										class="rounded border border-black p-2"
+										bind:value={line.hemistichTwo!.text}
+									/>
+									<label for={`hem-two-text-${line.numberWithinPage}`} class="self-center">
+										مصراع دوم
+									</label>
+								</div>
+
+								<div class="flex flex-col">
+									<input
+										id={`hem-two-notes-${line.numberWithinPage}`}
+										type="checkbox"
+										bind:checked={line.hemistichTwo!.hasNotes}
+									/>
+									<label for={`hem-two-notes-${line.numberWithinPage}`}>ح</label>
+								</div>
+							{/if}
+						</div>
+					</div>
+				{/each}
+			</div>
+		{/if}
 
 		<img
 			src={`/km/${volNumber}-${String(pgNumber).padStart(3, "0")}.png`}
 			alt="A page from the Shāhnāma"
-			class="rounded border border-black"
+			class="hidden 2xl:mx-auto 2xl:block 2xl:h-full 2xl:w-1/2 2xl:rounded 2xl:border 2xl:border-black"
 		/>
+	</div>
+
+	{#if transcriptionFirst}
+		<div class="2xl:hidden">
+			<hr class="my-6 border border-dashed border-black" />
+			<img
+				src={`/km/${volNumber}-${String(pgNumber).padStart(3, "0")}.png`}
+				alt="A page from the Shāhnāma"
+				class="rounded border border-black 2xl:hidden"
+			/>
+		</div>
 	{/if}
 </div>
