@@ -307,7 +307,7 @@
 										bind:value={line.hemistichOne!.text}
 									/>
 									<label for={`hem-one-text-${line.numberWithinPage}`} class="self-center">
-										مصراع اول
+										م ا
 									</label>
 								</div>
 
@@ -329,7 +329,7 @@
 										bind:value={line.hemistichTwo!.text}
 									/>
 									<label for={`hem-two-text-${line.numberWithinPage}`} class="self-center">
-										مصراع دوم
+										م د
 									</label>
 								</div>
 
