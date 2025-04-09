@@ -318,7 +318,7 @@
 										type="checkbox"
 										bind:checked={line.hemistichOne!.hasNotes}
 									/>
-									<label for={`hem-one-notes-${line.numberWithinPage}`}>ح</label>
+									<label for={`hem-one-notes-${line.numberWithinPage}`}>پ</label>
 								</div>
 
 								<div class="flex grow flex-col">
@@ -339,7 +339,7 @@
 										type="checkbox"
 										bind:checked={line.hemistichTwo!.hasNotes}
 									/>
-									<label for={`hem-two-notes-${line.numberWithinPage}`}>ح</label>
+									<label for={`hem-two-notes-${line.numberWithinPage}`}>پ</label>
 								</div>
 							{/if}
 						</div>
