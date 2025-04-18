@@ -28,3 +28,19 @@ CREATE TABLE line (
     FOREIGN KEY (editor) REFERENCES user(short_name),
     UNIQUE (volume_number, page_number, number_within_page, editor)
 );
+
+CREATE TABLE line_simplified (
+    id INTEGER NOT NULL PRIMARY KEY,
+    volume_number INTEGER NOT NULL,
+    page_number INTEGER NOT NULL,
+    number_within_page INTEGER NOT NULL,
+    editor TEXT NOT NULL,
+    is_heading INTEGER NOT NULL,
+    has_notes INTEGER NOT NULL,
+    number_listed INTEGER,
+    heading_text TEXT,
+    hemistich_one_text TEXT,
+    hemistich_two_text TEXT,
+    FOREIGN KEY (editor) REFERENCES user(short_name),
+    UNIQUE (volume_number, page_number, number_within_page, editor)
+);
