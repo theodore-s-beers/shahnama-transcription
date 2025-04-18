@@ -16,7 +16,7 @@ export const GET: RequestHandler = async ({ locals, platform, request }) => {
 
 	const sql = `
 		SELECT DISTINCT volume_number AS vol, page_number AS pg
-		FROM line
+		FROM line_simplified
 		WHERE editor = ?;
 	`;
 

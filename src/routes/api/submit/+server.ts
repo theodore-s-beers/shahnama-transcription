@@ -1,5 +1,5 @@
 import type { RequestHandler } from "@sveltejs/kit";
-import { maxPages, type Line } from "$lib/utils";
+import { maxPages, type LineSimplified } from "$lib/utils";
 
 export const POST: RequestHandler = async ({ locals, platform, request }) => {
 	// Same origin only
@@ -30,20 +30,15 @@ export const POST: RequestHandler = async ({ locals, platform, request }) => {
 	}
 
 	// Validate lines (to some extent)
-	const lines: Line[] = data;
+	const lines: LineSimplified[] = data;
 	for (const line of lines) {
-		if (line.heading) {
+		if (line.isHeading) {
 			if (!line.headingText) return new Response("Missing heading text", { status: 400 });
 			else continue;
 		}
 
-		if (!line.hemistichOne.text || typeof line.hemistichOne.hasNotes !== "boolean") {
-			return new Response("Missing or invalid first hemistich", { status: 400 });
-		}
-
-		if (!line.hemistichTwo.text || typeof line.hemistichTwo.hasNotes !== "boolean") {
-			return new Response("Missing or invalid second hemistich", { status: 400 });
-		}
+		if (!line.hemistichOne) return new Response("Missing first hemistich", { status: 400 });
+		if (!line.hemistichTwo) return new Response("Missing second hemistich", { status: 400 });
 
 		if (typeof line.numberListed === "number") {
 			if (line.numberListed === 0 || line.numberListed % 5 !== 0)
@@ -60,7 +55,7 @@ export const POST: RequestHandler = async ({ locals, platform, request }) => {
 
 	const checkSql = `
     	SELECT COUNT(*)
-    	FROM line
+    	FROM line_simplified
     	WHERE volume_number = ?1 AND page_number = ?2 AND editor = ?3;
   	`;
 
@@ -69,7 +64,7 @@ export const POST: RequestHandler = async ({ locals, platform, request }) => {
 
 	if (currentCount && currentCount > lines.length) {
 		const deleteSql = `
-      		DELETE FROM line
+      		DELETE FROM line_simplified
       		WHERE volume_number = ?1 AND page_number = ?2 AND editor = ?3;
     	`;
 
@@ -81,22 +76,20 @@ export const POST: RequestHandler = async ({ locals, platform, request }) => {
 	// Proceeding with business as usual...
 
 	const upsertSql = `
-    	INSERT INTO line (
+    	INSERT INTO line_simplified (
       		volume_number, page_number, number_within_page,
-      		editor, heading, heading_text, number_listed,
-      		hemistich_one_text, hemistich_one_notes,
-      		hemistich_two_text, hemistich_two_notes
+      		editor, is_heading, has_notes, number_listed,
+			heading_text, hemistich_one_text, hemistich_two_text 
     	)
-    	VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)
+    	VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)
     	ON CONFLICT (volume_number, page_number, number_within_page, editor)
     	DO UPDATE SET
-      		heading = excluded.heading,
+      		is_heading = excluded.is_heading,
+			has_notes = excluded.has_notes,
+			number_listed = excluded.number_listed,
       		heading_text = excluded.heading_text,
-      		number_listed = excluded.number_listed,
       		hemistich_one_text = excluded.hemistich_one_text,
-      		hemistich_one_notes = excluded.hemistich_one_notes,
-      		hemistich_two_text = excluded.hemistich_two_text,
-      		hemistich_two_notes = excluded.hemistich_two_notes;
+      		hemistich_two_text = excluded.hemistich_two_text;
   	`;
 
 	const statements = lines.map((line) =>
@@ -107,13 +100,12 @@ export const POST: RequestHandler = async ({ locals, platform, request }) => {
 				pg,
 				line.numberWithinPage,
 				editor,
-				line.heading,
-				line.headingText ?? null,
+				line.isHeading,
+				line.hasNotes,
 				line.numberListed ?? null,
-				line.hemistichOne.text ?? null,
-				line.hemistichOne.hasNotes ?? null,
-				line.hemistichTwo.text ?? null,
-				line.hemistichTwo.hasNotes ?? null,
+				line.headingText ?? null,
+				line.hemistichOne ?? null,
+				line.hemistichTwo ?? null,
 			),
 	);
 
