@@ -16,6 +16,16 @@ export interface Line {
 	hemistichTwo: Hemistich;
 }
 
+export interface LineSimplified {
+	numberWithinPage: number;
+	isHeading: boolean;
+	hasNotes: boolean;
+	numberListed?: number;
+	headingText?: string;
+	hemistichOne?: string;
+	hemistichTwo?: string;
+}
+
 export interface PageNumber {
 	vol: number;
 	pg: number;
@@ -49,6 +59,16 @@ export function createLines(count: number): Line[] {
 	}));
 }
 
+export function createLinesSimplified(count: number): LineSimplified[] {
+	return Array.from({ length: count }, (_, i) => ({
+		numberWithinPage: i + 1,
+		isHeading: false,
+		hasNotes: false,
+		hemistichOne: "",
+		hemistichTwo: "",
+	}));
+}
+
 export function normalizeLines(lines: Line[]): Line[] {
 	const cleaned: Line[] = [];
 
@@ -77,6 +97,26 @@ export function normalizeLines(lines: Line[]): Line[] {
 	}
 
 	return cleaned;
+}
+
+export function normalizeLinesSimplified(lines: LineSimplified[]): LineSimplified[] {
+	return lines.map((line) =>
+		line.isHeading
+			? {
+					numberWithinPage: line.numberWithinPage,
+					isHeading: true,
+					hasNotes: line.hasNotes,
+					headingText: line.headingText ? cleanString(line.headingText) : undefined,
+				}
+			: {
+					numberWithinPage: line.numberWithinPage,
+					isHeading: false,
+					hasNotes: line.hasNotes,
+					numberListed: line.numberListed,
+					hemistichOne: line.hemistichOne ? cleanString(line.hemistichOne) : undefined,
+					hemistichTwo: line.hemistichTwo ? cleanString(line.hemistichTwo) : undefined,
+				},
+	);
 }
 
 export function validSelection(vol: number, pg: number): boolean {
