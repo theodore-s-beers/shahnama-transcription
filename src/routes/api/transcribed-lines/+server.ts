@@ -1,5 +1,5 @@
 import type { RequestHandler } from "@sveltejs/kit";
-import { validSelection, type Hemistich } from "$lib/utils";
+import { validSelection } from "$lib/utils";
 
 const allowedOrigins = ["https://shahnama-transcription.pages.dev", "https://www.theobeers.com"];
 
@@ -74,7 +74,7 @@ export const GET: RequestHandler = async ({ platform, request }) => {
 
 	// Editor must be valid
 
-	const editorSql = "SELECT EXISTS ( SELECT 1 FROM line WHERE editor = ? ) AS 'exists';";
+	const editorSql = "SELECT EXISTS ( SELECT 1 FROM line_simplified WHERE editor = ? ) AS 'exists';";
 	const editorStmt = db.prepare(editorSql).bind(editor);
 
 	const editorResult = await editorStmt.first<{ exists: number }>();
@@ -83,7 +83,7 @@ export const GET: RequestHandler = async ({ platform, request }) => {
 
 	const lineSql = `
 		SELECT *
-		FROM line
+		FROM line_simplified
 		WHERE editor = ?
 			AND volume_number BETWEEN ? AND ?
 			AND page_number BETWEEN ? AND ?
@@ -99,19 +99,14 @@ export const GET: RequestHandler = async ({ platform, request }) => {
 	const lines: ReturnLine[] = results.map((row) => ({
 		volumeNumber: row.volume_number,
 		pageNumber: row.page_number,
-		editor: row.editor,
-		heading: !!row.heading,
-		headingText: row.heading_text ?? undefined,
 		numberWithinPage: row.number_within_page,
+		editor: row.editor,
+		isHeading: !!row.is_heading,
+		hasNotes: !!row.has_notes,
 		numberListed: row.number_listed ?? undefined,
-		hemistichOne: {
-			text: row.hemistich_one_text ?? undefined,
-			hasNotes: typeof row.hemistich_one_notes === "number" ? !!row.hemistich_one_notes : undefined,
-		},
-		hemistichTwo: {
-			text: row.hemistich_two_text ?? undefined,
-			hasNotes: typeof row.hemistich_two_notes === "number" ? !!row.hemistich_two_notes : undefined,
-		},
+		headingText: row.heading_text ?? undefined,
+		hemistichOne: row.hemistich_one_text ?? undefined,
+		hemistichTwo: row.hemistich_two_text ?? undefined,
 	}));
 
 	// We grabbed whole pages' worth of lines and may need to remove
@@ -146,13 +141,12 @@ interface RawLine {
 	page_number: number;
 	number_within_page: number;
 	editor: string;
-	heading: number;
-	heading_text: string | null;
+	is_heading: number;
+	has_notes: number;
 	number_listed: number | null;
+	heading_text: string | null;
 	hemistich_one_text: string | null;
-	hemistich_one_notes: number | null;
 	hemistich_two_text: string | null;
-	hemistich_two_notes: number | null;
 }
 
 interface ReturnLine {
@@ -160,9 +154,10 @@ interface ReturnLine {
 	pageNumber: number;
 	numberWithinPage: number;
 	editor: string;
-	heading: boolean;
-	headingText?: string;
+	isHeading: boolean;
+	hasNotes: boolean;
 	numberListed?: number;
-	hemistichOne: Hemistich;
-	hemistichTwo: Hemistich;
+	headingText?: string;
+	hemistichOne?: string;
+	hemistichTwo?: string;
 }
