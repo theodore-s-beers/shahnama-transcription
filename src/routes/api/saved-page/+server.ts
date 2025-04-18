@@ -1,5 +1,5 @@
 import type { RequestHandler } from "@sveltejs/kit";
-import { maxPages, type Line } from "$lib/utils";
+import { maxPages, type LineSimplified } from "$lib/utils";
 
 export const GET: RequestHandler = async ({ locals, platform, request }) => {
 	// Same origin only (if origin is provided)
@@ -28,14 +28,13 @@ export const GET: RequestHandler = async ({ locals, platform, request }) => {
 	const sql = `
     	SELECT
       		number_within_page,
-      		heading,
+      		is_heading,
+			has_notes,
+			number_listed,
       		heading_text,
-      		number_listed,
-      		hemistich_one_text,
-      		hemistich_one_notes,
-      		hemistich_two_text,
-      		hemistich_two_notes
-    	FROM line
+      		hemistich_one,
+      		hemistich_two
+    	FROM line_simplified
     	WHERE volume_number = $1 AND page_number = $2 AND editor = $3
     	ORDER BY number_within_page;
   	`;
@@ -45,19 +44,14 @@ export const GET: RequestHandler = async ({ locals, platform, request }) => {
 
 	if (results.length === 0) return new Response("No transcription found", { status: 404 });
 
-	const lines: Line[] = results.map((row) => ({
-		heading: !!row.heading,
-		headingText: row.heading_text ?? undefined,
+	const lines: LineSimplified[] = results.map((row) => ({
 		numberWithinPage: row.number_within_page,
+		isHeading: !!row.is_heading,
+		hasNotes: !!row.has_notes,
 		numberListed: row.number_listed ?? undefined,
-		hemistichOne: {
-			text: row.hemistich_one_text ?? undefined,
-			hasNotes: !!row.hemistich_one_notes,
-		},
-		hemistichTwo: {
-			text: row.hemistich_two_text ?? undefined,
-			hasNotes: !!row.hemistich_two_notes,
-		},
+		headingText: row.heading_text ?? undefined,
+		hemistichOne: row.hemistich_one ?? undefined,
+		hemistichTwo: row.hemistich_two ?? undefined,
 	}));
 
 	return new Response(JSON.stringify(lines), {
@@ -68,11 +62,10 @@ export const GET: RequestHandler = async ({ locals, platform, request }) => {
 
 interface RawLine {
 	number_within_page: number;
-	heading: number;
-	heading_text: string | null;
+	is_heading: number;
+	has_notes: number;
 	number_listed: number | null;
-	hemistich_one_text: string | null;
-	hemistich_one_notes: number | null;
-	hemistich_two_text: string | null;
-	hemistich_two_notes: number | null;
+	heading_text: string | null;
+	hemistich_one: string | null;
+	hemistich_two: string | null;
 }
