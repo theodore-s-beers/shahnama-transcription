@@ -2,20 +2,6 @@
 // TYPES
 //
 
-export interface Hemistich {
-	text?: string;
-	hasNotes?: boolean;
-}
-
-export interface Line {
-	heading: boolean;
-	headingText?: string;
-	numberWithinPage: number;
-	numberListed?: number;
-	hemistichOne: Hemistich;
-	hemistichTwo: Hemistich;
-}
-
 export interface LineSimplified {
 	numberWithinPage: number;
 	isHeading: boolean;
@@ -50,15 +36,6 @@ export const maxPages: Record<number, number> = {
 // FUNCTIONS
 //
 
-export function createLines(count: number): Line[] {
-	return Array.from({ length: count }, (_, i) => ({
-		heading: false,
-		numberWithinPage: i + 1,
-		hemistichOne: {},
-		hemistichTwo: {},
-	}));
-}
-
 export function createLinesSimplified(count: number): LineSimplified[] {
 	return Array.from({ length: count }, (_, i) => ({
 		numberWithinPage: i + 1,
@@ -67,36 +44,6 @@ export function createLinesSimplified(count: number): LineSimplified[] {
 		hemistichOne: "",
 		hemistichTwo: "",
 	}));
-}
-
-export function normalizeLines(lines: Line[]): Line[] {
-	const cleaned: Line[] = [];
-
-	for (const line of lines) {
-		const newLine: Line = line.heading
-			? {
-					heading: true,
-					headingText: line.headingText,
-					numberWithinPage: line.numberWithinPage,
-					hemistichOne: {},
-					hemistichTwo: {},
-				}
-			: {
-					heading: false,
-					numberWithinPage: line.numberWithinPage,
-					numberListed: line.numberListed,
-					hemistichOne: line.hemistichOne.text
-						? { ...line.hemistichOne, text: cleanString(line.hemistichOne.text) }
-						: {},
-					hemistichTwo: line.hemistichTwo.text
-						? { ...line.hemistichTwo, text: cleanString(line.hemistichTwo.text) }
-						: {},
-				};
-
-		cleaned.push(newLine);
-	}
-
-	return cleaned;
 }
 
 export function normalizeLinesSimplified(lines: LineSimplified[]): LineSimplified[] {
