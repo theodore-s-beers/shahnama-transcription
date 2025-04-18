@@ -32,8 +32,8 @@ export const GET: RequestHandler = async ({ locals, platform, request }) => {
 			has_notes,
 			number_listed,
       		heading_text,
-      		hemistich_one,
-      		hemistich_two
+      		hemistich_one_text,
+      		hemistich_two_text
     	FROM line_simplified
     	WHERE volume_number = $1 AND page_number = $2 AND editor = $3
     	ORDER BY number_within_page;
@@ -50,8 +50,8 @@ export const GET: RequestHandler = async ({ locals, platform, request }) => {
 		hasNotes: !!row.has_notes,
 		numberListed: row.number_listed ?? undefined,
 		headingText: row.heading_text ?? undefined,
-		hemistichOne: row.hemistich_one ?? undefined,
-		hemistichTwo: row.hemistich_two ?? undefined,
+		hemistichOne: row.hemistich_one_text ?? undefined,
+		hemistichTwo: row.hemistich_two_text ?? undefined,
 	}));
 
 	return new Response(JSON.stringify(lines), {
@@ -66,6 +66,6 @@ interface RawLine {
 	has_notes: number;
 	number_listed: number | null;
 	heading_text: string | null;
-	hemistich_one: string | null;
-	hemistich_two: string | null;
+	hemistich_one_text: string | null;
+	hemistich_two_text: string | null;
 }
