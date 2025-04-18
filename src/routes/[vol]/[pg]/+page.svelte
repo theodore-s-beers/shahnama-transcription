@@ -3,7 +3,12 @@
 	import { onMount } from "svelte";
 	import { page } from "$app/state";
 	import { goto } from "$app/navigation";
-	import { createLines, maxPages, normalizeLines, type Line } from "$lib/utils";
+	import {
+		createLinesSimplified,
+		maxPages,
+		normalizeLinesSimplified,
+		type LineSimplified,
+	} from "$lib/utils";
 	import type { PageProps } from "./$types";
 
 	const volNumber = parseInt(page.params.vol);
@@ -11,7 +16,7 @@
 
 	let lineCount = $state(0);
 	let lineCountConfirmed = $state(false);
-	let lines: Line[] = $state([]);
+	let lines: LineSimplified[] = $state([]);
 	let transcriptionFirst = $state(false);
 	let savedLines = $state(false);
 
@@ -23,7 +28,7 @@
 
 		lineCountConfirmed = true;
 		transcriptionFirst = true;
-		lines = createLines(lineCount);
+		lines = createLinesSimplified(lineCount);
 
 		localStorage.setItem(`lineCount-${volNumber}-${pgNumber}`, lineCount.toString());
 		localStorage.setItem(`lines-${volNumber}-${pgNumber}`, JSON.stringify(lines));
@@ -44,7 +49,7 @@
 
 	// Non-committers can download transcriptions in JSON
 	function downloadLines() {
-		lines = normalizeLines(lines);
+		lines = normalizeLinesSimplified(lines);
 		const data = JSON.stringify(lines, null, 2);
 		const blob = new Blob([data], { type: "application/json" });
 
@@ -62,7 +67,7 @@
 
 	// Committers can save their transcriptions to the DB
 	async function submitLines() {
-		lines = normalizeLines(lines);
+		lines = normalizeLinesSimplified(lines);
 
 		try {
 			const params = new URLSearchParams({
@@ -99,10 +104,10 @@
 			const res = await fetch(`/api/saved-page?${params}`);
 			if (!res.ok) throw new Error(`${res.status}: ${await res.text()}`);
 
-			const dbLines: Line[] = await res.json();
+			const dbLines: LineSimplified[] = await res.json();
 			lines = dbLines;
 
-			lineCount = dbLines.length;
+			lineCount = lines.length;
 			lineCountConfirmed = true;
 			transcriptionFirst = true;
 			savedLines = true;
@@ -136,7 +141,7 @@
 			return;
 		}
 
-		const storedLines: Line[] = JSON.parse(lsLines);
+		const storedLines: LineSimplified[] = JSON.parse(lsLines);
 		if (storedLines.length === 0 || storedLines.length !== storedLineCount) {
 			resetLines();
 			return;
@@ -267,12 +272,12 @@
 								<input
 									type="checkbox"
 									id={`heading-check-${line.numberWithinPage}`}
-									bind:checked={line.heading}
+									bind:checked={line.isHeading}
 								/>
 								<label for={`heading-check-${line.numberWithinPage}`}>ع</label>
 							</div>
 
-							{#if line.heading}
+							{#if line.isHeading}
 								<div class="flex grow flex-col">
 									<input
 										id={`heading-text-${line.numberWithinPage}`}
@@ -283,6 +288,15 @@
 									<label for={`heading-text-${line.numberWithinPage}`} class="self-center">
 										عنوان
 									</label>
+								</div>
+
+								<div class="flex flex-col">
+									<input
+										id={`has-notes-${line.numberWithinPage}`}
+										type="checkbox"
+										bind:checked={line.hasNotes}
+									/>
+									<label for={`has-notes-${line.numberWithinPage}`}>پ</label>
 								</div>
 							{:else}
 								<div class="flex flex-col">
@@ -301,45 +315,31 @@
 
 								<div class="flex grow flex-col">
 									<input
-										id={`hem-one-text-${line.numberWithinPage}`}
+										id={`hem-one-${line.numberWithinPage}`}
 										type="text"
 										class="rounded border border-black p-2"
-										bind:value={line.hemistichOne!.text}
+										bind:value={line.hemistichOne}
 									/>
-									<label for={`hem-one-text-${line.numberWithinPage}`} class="self-center">
-										م ا
-									</label>
-								</div>
-
-								<!-- This is vestigial and will eventually be removed -->
-								<div class="hidden">
-									<input
-										id={`hem-one-notes-${line.numberWithinPage}`}
-										type="checkbox"
-										bind:checked={line.hemistichOne!.hasNotes}
-									/>
-									<label for={`hem-one-notes-${line.numberWithinPage}`}>پ</label>
+									<label for={`hem-one-${line.numberWithinPage}`} class="self-center">م ا</label>
 								</div>
 
 								<div class="flex grow flex-col">
 									<input
-										id={`hem-two-text-${line.numberWithinPage}`}
+										id={`hem-two-${line.numberWithinPage}`}
 										type="text"
 										class="rounded border border-black p-2"
-										bind:value={line.hemistichTwo!.text}
+										bind:value={line.hemistichTwo}
 									/>
-									<label for={`hem-two-text-${line.numberWithinPage}`} class="self-center">
-										م د
-									</label>
+									<label for={`hem-two-${line.numberWithinPage}`} class="self-center">م د</label>
 								</div>
 
 								<div class="flex flex-col">
 									<input
-										id={`hem-two-notes-${line.numberWithinPage}`}
+										id={`has-notes-${line.numberWithinPage}`}
 										type="checkbox"
-										bind:checked={line.hemistichTwo!.hasNotes}
+										bind:checked={line.hasNotes}
 									/>
-									<label for={`hem-two-notes-${line.numberWithinPage}`}>پ</label>
+									<label for={`has-notes-${line.numberWithinPage}`}>پ</label>
 								</div>
 							{/if}
 						</div>
