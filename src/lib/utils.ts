@@ -46,14 +46,14 @@ export function createLinesSimplified(count: number): LineSimplified[] {
 	}));
 }
 
-export function nextPageNumber(current: PageNumber): PageNumber {
+export function nextPageNumber(currVol: number, currPg: number): [number, number] {
 	const next = {
-		vol: current.pg >= maxPages[current.vol] ? current.vol + 1 : current.vol,
-		pg: current.pg >= maxPages[current.vol] ? 3 : current.pg + 1,
+		vol: currPg >= maxPages[currVol] ? currVol + 1 : currVol,
+		pg: currPg >= maxPages[currVol] ? 3 : currPg + 1,
 	};
 
-	if (validSelection(next.vol, next.pg)) return next;
-	else return { vol: 1, pg: 3 };
+	if (validSelection(next.vol, next.pg)) return [next.vol, next.pg];
+	else return [1, 3];
 }
 
 export function normalizeLinesSimplified(lines: LineSimplified[]): LineSimplified[] {
@@ -76,14 +76,14 @@ export function normalizeLinesSimplified(lines: LineSimplified[]): LineSimplifie
 	);
 }
 
-export function prevPageNumber(current: PageNumber): PageNumber {
+export function prevPageNumber(currVol: number, currPg: number): [number, number] {
 	const prev = {
-		vol: current.pg <= 3 ? current.vol - 1 : current.vol,
-		pg: current.pg <= 3 ? maxPages[current.vol - 1] : current.pg - 1,
+		vol: currPg <= 3 ? currVol - 1 : currVol,
+		pg: currPg <= 3 ? maxPages[currVol - 1] : currPg - 1,
 	};
 
-	if (validSelection(prev.vol, prev.pg)) return prev;
-	else return { vol: 8, pg: maxPages[8] };
+	if (validSelection(prev.vol, prev.pg)) return [prev.vol, prev.pg];
+	else return [8, maxPages[8]];
 }
 
 export function validSelection(vol: number, pg: number): boolean {
