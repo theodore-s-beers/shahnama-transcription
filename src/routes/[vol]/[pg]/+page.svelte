@@ -6,13 +6,18 @@
 	import {
 		createLinesSimplified,
 		maxPages,
+		nextPgNum,
 		normalizeLinesSimplified,
+		prevPgNum,
 		type LineSimplified,
 	} from "$lib/utils";
 	import type { PageProps } from "./$types";
 
-	const volNumber = parseInt(page.params.vol);
-	const pgNumber = parseInt(page.params.pg);
+	let volNumber = $derived(parseInt(page.params.vol));
+	let pgNumber = $derived(parseInt(page.params.pg));
+
+	let [nextVol, nextPg] = $derived(nextPgNum(volNumber, pgNumber));
+	let [prevVol, prevPg] = $derived(prevPgNum(volNumber, pgNumber));
 
 	let lineCount = $state(0);
 	let lineCountConfirmed = $state(false);
@@ -163,7 +168,12 @@
 <Toaster />
 
 <div class="mx-auto p-4 pb-6 text-lg">
-	<div class="mb-3 flex justify-end">
+	<div class="mb-3 flex">
+		<div class="mx-auto flex gap-8">
+			<a href={`/${prevVol}/${prevPg}`} class="text-blue-800 hover:underline">Prev. pg.</a>
+			<a href={`/${nextVol}/${nextPg}`} class="text-blue-800 hover:underline">Next pg.</a>
+		</div>
+
 		<div class="mr-8">
 			<a href="/" class="text-blue-800 hover:underline">Home</a>
 		</div>
