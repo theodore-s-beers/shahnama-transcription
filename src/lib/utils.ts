@@ -46,6 +46,16 @@ export function createLinesSimplified(count: number): LineSimplified[] {
 	}));
 }
 
+export function nextPageNumber(current: PageNumber): PageNumber {
+	const next = {
+		vol: current.pg >= maxPages[current.vol] ? current.vol + 1 : current.vol,
+		pg: current.pg >= maxPages[current.vol] ? 3 : current.pg + 1,
+	};
+
+	if (validSelection(next.vol, next.pg)) return next;
+	else return { vol: 1, pg: 3 };
+}
+
 export function normalizeLinesSimplified(lines: LineSimplified[]): LineSimplified[] {
 	return lines.map((line) =>
 		line.isHeading
@@ -64,6 +74,16 @@ export function normalizeLinesSimplified(lines: LineSimplified[]): LineSimplifie
 					hemistichTwo: line.hemistichTwo ? cleanString(line.hemistichTwo) : undefined,
 				},
 	);
+}
+
+export function prevPageNumber(current: PageNumber): PageNumber {
+	const prev = {
+		vol: current.pg <= 3 ? current.vol - 1 : current.vol,
+		pg: current.pg <= 3 ? maxPages[current.vol - 1] : current.pg - 1,
+	};
+
+	if (validSelection(prev.vol, prev.pg)) return prev;
+	else return { vol: 8, pg: maxPages[8] };
 }
 
 export function validSelection(vol: number, pg: number): boolean {
