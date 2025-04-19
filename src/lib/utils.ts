@@ -46,7 +46,7 @@ export function createLinesSimplified(count: number): LineSimplified[] {
 	}));
 }
 
-export function nextPageNumber(currVol: number, currPg: number): [number, number] {
+export function nextPgNum(currVol: number, currPg: number): [number, number] {
 	const next = {
 		vol: currPg >= maxPages[currVol] ? currVol + 1 : currVol,
 		pg: currPg >= maxPages[currVol] ? 3 : currPg + 1,
@@ -76,7 +76,7 @@ export function normalizeLinesSimplified(lines: LineSimplified[]): LineSimplifie
 	);
 }
 
-export function prevPageNumber(currVol: number, currPg: number): [number, number] {
+export function prevPgNum(currVol: number, currPg: number): [number, number] {
 	const prev = {
 		vol: currPg <= 3 ? currVol - 1 : currVol,
 		pg: currPg <= 3 ? maxPages[currVol - 1] : currPg - 1,
