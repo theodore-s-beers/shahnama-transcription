@@ -1,8 +1,7 @@
 <script lang="ts">
 	import toast, { Toaster } from "svelte-french-toast";
-	import { onMount } from "svelte";
 	import { page } from "$app/state";
-	import { goto } from "$app/navigation";
+	import { afterNavigate, goto } from "$app/navigation";
 	import {
 		createLines,
 		maxPages,
@@ -13,11 +12,11 @@
 	} from "$lib/utils";
 	import type { PageProps } from "./$types";
 
-	let volNumber = $derived(parseInt(page.params.vol));
-	let pgNumber = $derived(parseInt(page.params.pg));
+	const volNumber = $derived(parseInt(page.params.vol));
+	const pgNumber = $derived(parseInt(page.params.pg));
 
-	let [nextVol, nextPg] = $derived(nextPgNum(volNumber, pgNumber));
-	let [prevVol, prevPg] = $derived(prevPgNum(volNumber, pgNumber));
+	const [nextVol, nextPg] = $derived(nextPgNum(volNumber, pgNumber));
+	const [prevVol, prevPg] = $derived(prevPgNum(volNumber, pgNumber));
 
 	let lineCount = $state(0);
 	let lineCountConfirmed = $state(false);
@@ -25,7 +24,7 @@
 	let transcriptionFirst = $state(false);
 	let savedLines = $state(false);
 
-	let { data }: PageProps = $props();
+	const { data }: PageProps = $props();
 	const committer = typeof data.shortName === "string" && data.shortName.length > 0;
 
 	function confirmLineCount() {
@@ -96,7 +95,7 @@
 		}
 	}
 
-	onMount(async () => {
+	afterNavigate(async () => {
 		if (volNumber < 1 || volNumber > 8) return goto("/");
 		if (pgNumber < 3 || pgNumber > maxPages[volNumber]) return goto("/");
 
