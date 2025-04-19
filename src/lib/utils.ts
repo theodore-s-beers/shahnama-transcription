@@ -2,7 +2,7 @@
 // TYPES
 //
 
-export interface LineSimplified {
+export interface Line {
 	numberWithinPage: number;
 	isHeading: boolean;
 	hasNotes: boolean;
@@ -36,7 +36,7 @@ export const maxPages: Record<number, number> = {
 // FUNCTIONS
 //
 
-export function createLinesSimplified(count: number): LineSimplified[] {
+export function createLines(count: number): Line[] {
 	return Array.from({ length: count }, (_, i) => ({
 		numberWithinPage: i + 1,
 		isHeading: false,
@@ -56,7 +56,7 @@ export function nextPgNum(currVol: number, currPg: number): [number, number] {
 	else return [1, 3];
 }
 
-export function normalizeLinesSimplified(lines: LineSimplified[]): LineSimplified[] {
+export function normalizeLines(lines: Line[]): Line[] {
 	return lines.map((line) =>
 		line.isHeading
 			? {

@@ -4,12 +4,12 @@
 	import { page } from "$app/state";
 	import { goto } from "$app/navigation";
 	import {
-		createLinesSimplified,
+		createLines,
 		maxPages,
 		nextPgNum,
-		normalizeLinesSimplified,
+		normalizeLines,
 		prevPgNum,
-		type LineSimplified,
+		type Line,
 	} from "$lib/utils";
 	import type { PageProps } from "./$types";
 
@@ -21,7 +21,7 @@
 
 	let lineCount = $state(0);
 	let lineCountConfirmed = $state(false);
-	let lines: LineSimplified[] = $state([]);
+	let lines: Line[] = $state([]);
 	let transcriptionFirst = $state(false);
 	let savedLines = $state(false);
 
@@ -33,7 +33,7 @@
 
 		lineCountConfirmed = true;
 		transcriptionFirst = true;
-		lines = createLinesSimplified(lineCount);
+		lines = createLines(lineCount);
 
 		localStorage.setItem(`lineCount-${volNumber}-${pgNumber}`, lineCount.toString());
 		localStorage.setItem(`lines-${volNumber}-${pgNumber}`, JSON.stringify(lines));
@@ -54,7 +54,7 @@
 
 	// Non-committers can download transcriptions in JSON
 	function downloadLines() {
-		lines = normalizeLinesSimplified(lines);
+		lines = normalizeLines(lines);
 		const data = JSON.stringify(lines, null, 2);
 		const blob = new Blob([data], { type: "application/json" });
 
@@ -72,7 +72,7 @@
 
 	// Committers can save their transcriptions to the DB
 	async function submitLines() {
-		lines = normalizeLinesSimplified(lines);
+		lines = normalizeLines(lines);
 
 		try {
 			const params = new URLSearchParams({
@@ -109,7 +109,7 @@
 			const res = await fetch(`/api/saved-page?${params}`);
 			if (!res.ok) throw new Error(`${res.status}: ${await res.text()}`);
 
-			const dbLines: LineSimplified[] = await res.json();
+			const dbLines: Line[] = await res.json();
 			lines = dbLines;
 
 			lineCount = lines.length;
@@ -146,7 +146,7 @@
 			return;
 		}
 
-		const storedLines: LineSimplified[] = JSON.parse(lsLines);
+		const storedLines: Line[] = JSON.parse(lsLines);
 		if (storedLines.length === 0 || storedLines.length !== storedLineCount) {
 			resetLines();
 			return;

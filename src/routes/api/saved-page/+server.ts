@@ -1,5 +1,5 @@
 import type { RequestHandler } from "@sveltejs/kit";
-import { maxPages, type LineSimplified } from "$lib/utils";
+import { maxPages, type Line } from "$lib/utils";
 
 export const GET: RequestHandler = async ({ locals, platform, request }) => {
 	// Same origin only (if origin is provided)
@@ -44,7 +44,7 @@ export const GET: RequestHandler = async ({ locals, platform, request }) => {
 
 	if (results.length === 0) return new Response("No transcription found", { status: 404 });
 
-	const lines: LineSimplified[] = results.map((row) => ({
+	const lines: Line[] = results.map((row) => ({
 		numberWithinPage: row.number_within_page,
 		isHeading: !!row.is_heading,
 		hasNotes: !!row.has_notes,

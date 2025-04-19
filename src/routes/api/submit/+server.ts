@@ -1,5 +1,5 @@
 import type { RequestHandler } from "@sveltejs/kit";
-import { maxPages, type LineSimplified } from "$lib/utils";
+import { maxPages, type Line } from "$lib/utils";
 
 export const POST: RequestHandler = async ({ locals, platform, request }) => {
 	// Same origin only
@@ -30,7 +30,7 @@ export const POST: RequestHandler = async ({ locals, platform, request }) => {
 	}
 
 	// Validate lines (to some extent)
-	const lines: LineSimplified[] = data;
+	const lines: Line[] = data;
 	for (const line of lines) {
 		if (line.isHeading) {
 			if (!line.headingText) return new Response("Missing heading text", { status: 400 });
