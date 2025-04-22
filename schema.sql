@@ -12,6 +12,7 @@ CREATE TABLE session (
     FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
+-- Table no longer in use, but still present
 CREATE TABLE line (
     id INTEGER NOT NULL PRIMARY KEY,
     volume_number INTEGER NOT NULL,
@@ -44,3 +45,7 @@ CREATE TABLE line_simplified (
     FOREIGN KEY (editor) REFERENCES user(short_name),
     UNIQUE (volume_number, page_number, number_within_page, editor)
 );
+
+CREATE INDEX idx_editor ON line_simplified(editor);
+CREATE INDEX idx_volume_number ON line_simplified(volume_number);
+CREATE INDEX idx_page_number ON line_simplified(page_number);
