@@ -1,8 +1,6 @@
 import type { RequestHandler } from "@sveltejs/kit";
 import { validSelection } from "$lib/utils";
 
-const allowedOrigins = ["https://shahnama-transcription.pages.dev", "https://www.theobeers.com"];
-
 export const GET: RequestHandler = async ({ platform, request }) => {
 	// Allowed origins only (if origin is provided)
 	// I will probably remove this restriction later
@@ -161,3 +159,9 @@ interface ReturnLine {
 	hemistichOne?: string;
 	hemistichTwo?: string;
 }
+
+const allowedOrigins = [
+	"https://transcribe.akvan.dev",
+	"https://shahnama-transcription.pages.dev",
+	"https://www.theobeers.com",
+];

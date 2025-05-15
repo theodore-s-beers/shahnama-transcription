@@ -4,7 +4,7 @@ import { maxPages, type Line } from "$lib/utils";
 export const GET: RequestHandler = async ({ locals, platform, request }) => {
 	// Same origin only (if origin is provided)
 	const origin = request.headers.get("origin");
-	if (origin && origin !== "https://shahnama-transcription.pages.dev") {
+	if (origin && !allowedOrigins.includes(origin)) {
 		return new Response("Invalid origin", { status: 403 });
 	}
 
@@ -69,3 +69,5 @@ interface RawLine {
 	hemistich_one_text: string | null;
 	hemistich_two_text: string | null;
 }
+
+const allowedOrigins = ["https://transcribe.akvan.dev", "https://shahnama-transcription.pages.dev"];

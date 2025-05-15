@@ -4,7 +4,7 @@ import { maxPages, type Line } from "$lib/utils";
 export const POST: RequestHandler = async ({ locals, platform, request }) => {
 	// Same origin only
 	const origin = request.headers.get("origin");
-	if (!origin || origin !== "https://shahnama-transcription.pages.dev") {
+	if (!origin || !allowedOrigins.includes(origin)) {
 		return new Response("Invalid origin", { status: 403 });
 	}
 
@@ -118,3 +118,5 @@ export const POST: RequestHandler = async ({ locals, platform, request }) => {
 		return new Response("Failed to save lines to database", { status: 500 });
 	}
 };
+
+const allowedOrigins = ["https://transcribe.akvan.dev", "https://shahnama-transcription.pages.dev"];

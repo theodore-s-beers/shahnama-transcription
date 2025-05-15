@@ -4,7 +4,7 @@ import type { PageNumber } from "$lib/utils";
 export const GET: RequestHandler = async ({ locals, platform, request }) => {
 	// Same origin only (if origin is provided)
 	const origin = request.headers.get("origin");
-	if (origin && origin !== "https://shahnama-transcription.pages.dev") {
+	if (origin && !allowedOrigins.includes(origin)) {
 		return new Response("Invalid origin", { status: 403 });
 	}
 
@@ -30,3 +30,5 @@ export const GET: RequestHandler = async ({ locals, platform, request }) => {
 		headers: { "content-type": "application/json" },
 	});
 };
+
+const allowedOrigins = ["https://transcribe.akvan.dev", "https://shahnama-transcription.pages.dev"];
