@@ -23,5 +23,5 @@ export default [
 		},
 		rules: { "svelte/no-at-html-tags": "warn" },
 	},
-	{ ignores: ["build/", ".svelte-kit/", "dist/"] },
+	{ ignores: [".svelte-kit/", ".wrangler/", "build/", "dist/"] },
 ];
