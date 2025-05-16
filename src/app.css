@@ -1,1 +1,7 @@
 @import "tailwindcss";
+
+@theme {
+	--font-fa: "Markazi Text", serif;
+	--text-fa: 1.3125rem; /* 21px */
+	--text-fa--line-height: calc(1.75 / 1.3125); /* 1.33 */
+}

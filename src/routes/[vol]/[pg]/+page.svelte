@@ -271,7 +271,7 @@
 						<div class="w-9 font-semibold">{i + 1}</div>
 
 						<div
-							class="flex grow items-center gap-4 rounded border border-black bg-white p-4 pb-3"
+							class="font-fa text-fa flex grow items-center gap-4 rounded border border-black bg-white p-4 pb-3"
 							dir="rtl"
 							spellcheck="false"
 							onchange={() =>
@@ -312,7 +312,7 @@
 									<input
 										id={`line-number-${line.numberWithinPage}`}
 										type="number"
-										class="w-20 rounded border border-black p-2 invalid:bg-red-100"
+										class="w-20 rounded border border-black p-2 font-sans text-lg invalid:bg-red-100"
 										min="5"
 										max="995"
 										step="5"
