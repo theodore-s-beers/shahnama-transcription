@@ -5,6 +5,7 @@ CREATE TABLE user (
     short_name TEXT UNIQUE
 );
 
+-- Table no longer in use, but still present
 CREATE TABLE session (
     id TEXT NOT NULL PRIMARY KEY,
     expires_at INTEGER NOT NULL,
