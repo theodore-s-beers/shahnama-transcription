@@ -13,7 +13,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const session = await validateSessionToken(event.platform!.env.DB, sessionToken);
 
 	if (!session) {
-		event.cookies.delete(SESSION_COOKIE_NAME, { path: "/" });
+		// event.cookies.delete(SESSION_COOKIE_NAME, { path: "/" });
 		event.locals.user = null;
 		event.locals.session = null;
 		return resolve(event);
