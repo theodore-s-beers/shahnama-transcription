@@ -1,7 +1,13 @@
 import { OAuth2RequestError } from "arctic";
-import type { RequestHandler } from "./$types";
 import { v7 as uuidv7 } from "uuid";
-import { type UserRow, SESSION_COOKIE_NAME, createSession, github } from "$lib/server/auth";
+import type { RequestHandler } from "./$types";
+import {
+	type UserRow,
+	SESSION_COOKIE_NAME,
+	SESSION_EXPIRES_SECONDS,
+	createSession,
+	github,
+} from "$lib/server/auth";
 
 export const GET: RequestHandler = async ({ cookies, platform, url }) => {
 	const code = url.searchParams.get("code");
@@ -41,8 +47,10 @@ export const GET: RequestHandler = async ({ cookies, platform, url }) => {
 
 		const sessionWithToken = await createSession(platform!.env.DB, userId);
 
-		// Minimal options, for debugging
-		cookies.set(SESSION_COOKIE_NAME, sessionWithToken.token, { path: "/" });
+		cookies.set(SESSION_COOKIE_NAME, sessionWithToken.token, {
+			path: "/",
+			maxAge: SESSION_EXPIRES_SECONDS,
+		});
 
 		return new Response(null, {
 			status: 302,

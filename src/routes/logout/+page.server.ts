@@ -1,5 +1,5 @@
 import { fail, redirect } from "@sveltejs/kit";
-import { deleteSession, SESSION_COOKIE_NAME } from "$lib/server/auth";
+import { SESSION_COOKIE_NAME, deleteSession } from "$lib/server/auth";
 import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ locals }) => {
