@@ -45,7 +45,7 @@ export const GET: RequestHandler = async ({ cookies, platform, url }) => {
 		// cookies.set("test_cookie", sessionWithToken.token, { path: "/" });
 
 		// Minimal options, for debugging
-		cookies.set("session_token", sessionWithToken.token, { path: "/" });
+		cookies.set("auth_session", sessionWithToken.token, { path: "/" });
 
 		return new Response(null, {
 			status: 302,
