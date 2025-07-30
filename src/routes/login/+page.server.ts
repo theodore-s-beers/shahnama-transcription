@@ -4,18 +4,12 @@ import { github } from "$lib/server/auth";
 import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ locals }) => {
-	if (locals.user) {
-		return redirect(302, "/");
-	}
-
-	return {};
+	if (locals.user) return redirect(302, "/");
 };
 
 export const actions = {
 	default: async (event) => {
-		if (event.locals.session) {
-			return redirect(302, "/");
-		}
+		if (event.locals.session) return redirect(302, "/");
 
 		const state = generateState();
 		const scopes = ["read:user"];

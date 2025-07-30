@@ -1,7 +1,13 @@
 import { OAuth2RequestError } from "arctic";
-import { generateIdFromEntropySize } from "lucia";
-import { github, initializeLucia } from "$lib/server/auth";
 import type { RequestHandler } from "./$types";
+import { v7 as uuidv7 } from "uuid";
+import {
+	type UserRow,
+	SESSION_COOKIE_NAME,
+	SESSION_EXPIRES_SECONDS,
+	createSession,
+	github,
+} from "$lib/server/auth";
 
 export const GET: RequestHandler = async ({ cookies, platform, url }) => {
 	const code = url.searchParams.get("code");
@@ -27,29 +33,27 @@ export const GET: RequestHandler = async ({ cookies, platform, url }) => {
 		const stmt = platform!.env.DB.prepare(sql).bind(githubUser.id);
 		const existingUser = await stmt.first<UserRow>();
 
-		const lucia = initializeLucia(platform!.env.DB);
+		let userId: string;
 
 		if (existingUser) {
-			const session = await lucia.createSession(existingUser.id, {});
-			const sessionCookie = lucia.createSessionCookie(session.id);
-			cookies.set(sessionCookie.name, sessionCookie.value, {
-				path: ".",
-				...sessionCookie.attributes,
-			});
+			userId = existingUser.id;
 		} else {
-			const userId = generateIdFromEntropySize(10); // 16 characters long
+			userId = uuidv7();
 
-			const sql = "INSERT INTO user (id, github_id, username) VALUES (?1, ?2, ?3)";
+			const sql = "INSERT INTO user (id, github_id, username) VALUES (?, ?, ?)";
 			const stmt = platform!.env.DB.prepare(sql).bind(userId, githubUser.id, githubUser.login);
 			await stmt.run();
-
-			const session = await lucia.createSession(userId, {});
-			const sessionCookie = lucia.createSessionCookie(session.id);
-			cookies.set(sessionCookie.name, sessionCookie.value, {
-				path: ".",
-				...sessionCookie.attributes,
-			});
 		}
+
+		const sessionWithToken = await createSession(platform!.env.DB, userId);
+
+		cookies.set(SESSION_COOKIE_NAME, sessionWithToken.token, {
+			path: "/",
+			secure: import.meta.env.PROD,
+			httpOnly: true,
+			maxAge: SESSION_EXPIRES_SECONDS,
+			sameSite: "lax",
+		});
 
 		return new Response(null, {
 			status: 302,
@@ -74,11 +78,4 @@ export const GET: RequestHandler = async ({ cookies, platform, url }) => {
 interface GitHubUser {
 	id: number;
 	login: string;
-}
-
-interface UserRow {
-	id: string;
-	github_id: number;
-	username: string;
-	short_name: string | null;
 }

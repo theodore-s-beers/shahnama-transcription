@@ -1,32 +1,31 @@
-import { initializeLucia } from "$lib/server/auth";
+import { SESSION_COOKIE_NAME, getUserById, validateSessionToken } from "$lib/server/auth";
 import type { Handle } from "@sveltejs/kit";
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const lucia = initializeLucia(event.platform!.env.DB);
+	const sessionToken = event.cookies.get(SESSION_COOKIE_NAME);
 
-	const sessionId = event.cookies.get(lucia.sessionCookieName);
-	if (!sessionId) {
+	if (!sessionToken) {
 		event.locals.user = null;
 		event.locals.session = null;
 		return resolve(event);
 	}
 
-	const { session, user } = await lucia.validateSession(sessionId);
-
-	if (session && session.fresh) {
-		const sessionCookie = lucia.createSessionCookie(session.id);
-		event.cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: ".",
-			...sessionCookie.attributes,
-		});
-	}
+	const session = await validateSessionToken(event.platform!.env.DB, sessionToken);
 
 	if (!session) {
-		const sessionCookie = lucia.createBlankSessionCookie();
-		event.cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: ".",
-			...sessionCookie.attributes,
-		});
+		event.cookies.delete(SESSION_COOKIE_NAME, { path: "/" });
+		event.locals.user = null;
+		event.locals.session = null;
+		return resolve(event);
+	}
+
+	const user = await getUserById(event.platform!.env.DB, session.userId);
+
+	if (!user) {
+		event.cookies.delete(SESSION_COOKIE_NAME, { path: "/" });
+		event.locals.user = null;
+		event.locals.session = null;
+		return resolve(event);
 	}
 
 	event.locals.user = user;
