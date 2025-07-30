@@ -7,7 +7,7 @@ import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from "$env/static/private";
 //
 
 export const github = new GitHub(GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, null);
-export const SESSION_COOKIE_NAME = "session_token";
+export const SESSION_COOKIE_NAME = "auth_session";
 export const SESSION_EXPIRES_SECONDS = 60 * 60 * 24;
 
 //

@@ -1,7 +1,7 @@
 import { OAuth2RequestError } from "arctic";
 import type { RequestHandler } from "./$types";
 import { v7 as uuidv7 } from "uuid";
-import { type UserRow, createSession, github } from "$lib/server/auth";
+import { type UserRow, SESSION_COOKIE_NAME, createSession, github } from "$lib/server/auth";
 
 export const GET: RequestHandler = async ({ cookies, platform, url }) => {
 	const code = url.searchParams.get("code");
@@ -41,11 +41,8 @@ export const GET: RequestHandler = async ({ cookies, platform, url }) => {
 
 		const sessionWithToken = await createSession(platform!.env.DB, userId);
 
-		// Does this even work?
-		// cookies.set("test_cookie", sessionWithToken.token, { path: "/" });
-
 		// Minimal options, for debugging
-		cookies.set("auth_session", sessionWithToken.token, { path: "/" });
+		cookies.set(SESSION_COOKIE_NAME, sessionWithToken.token, { path: "/" });
 
 		return new Response(null, {
 			status: 302,
