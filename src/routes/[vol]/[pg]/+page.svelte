@@ -12,8 +12,8 @@
 	} from "$lib/utils";
 	import type { PageProps } from "./$types";
 
-	const volNumber = $derived(parseInt(page.params.vol));
-	const pgNumber = $derived(parseInt(page.params.pg));
+	const volNumber = $derived(parseInt(page.params.vol!));
+	const pgNumber = $derived(parseInt(page.params.pg!));
 
 	const [nextVol, nextPg] = $derived(nextPgNum(volNumber, pgNumber));
 	const [prevVol, prevPg] = $derived(prevPgNum(volNumber, pgNumber));
