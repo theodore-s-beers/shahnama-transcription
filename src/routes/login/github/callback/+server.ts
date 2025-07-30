@@ -42,7 +42,7 @@ export const GET: RequestHandler = async ({ cookies, platform, url }) => {
 		const sessionWithToken = await createSession(platform!.env.DB, userId);
 
 		// Minimal options, for debugging
-		cookies.set(SESSION_COOKIE_NAME, sessionWithToken.token, { path: "/" });
+		cookies.set(`wtf${SESSION_COOKIE_NAME}`, sessionWithToken.token, { path: "/" });
 
 		return new Response(null, {
 			status: 302,
