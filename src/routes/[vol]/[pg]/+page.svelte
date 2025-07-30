@@ -271,7 +271,7 @@
 						<div class="w-9 font-semibold">{i + 1}</div>
 
 						<div
-							class="font-fa text-fa flex grow items-center gap-4 rounded border border-black bg-white p-4 pb-3"
+							class="flex grow items-center gap-4 rounded border border-black bg-white p-4 pb-3 font-fa text-fa"
 							dir="rtl"
 							spellcheck="false"
 							onchange={() =>
