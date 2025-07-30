@@ -12,6 +12,14 @@ CREATE TABLE session (
     FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
+CREATE TABLE session_new (
+	id TEXT NOT NULL PRIMARY KEY,
+	secret_hash BLOB NOT NULL,
+	created_at INTEGER NOT NULL,
+	user_id TEXT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user(id)
+) STRICT;
+
 -- Table no longer in use, but still present
 CREATE TABLE line (
     id INTEGER NOT NULL PRIMARY KEY,
