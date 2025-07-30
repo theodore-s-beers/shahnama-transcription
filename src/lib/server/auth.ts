@@ -114,7 +114,7 @@ interface SessionWithToken extends Session {
 
 interface SessionRow {
 	id: string;
-	secret_hash: Uint8Array;
+	secret_hash: ArrayBuffer;
 	created_at: number; // Unix timestamp in seconds
 	user_id: string;
 }
@@ -165,7 +165,7 @@ async function getSession(D1: D1Database, sessionId: string): Promise<Session | 
 	const row = d1Result.results[0];
 	const session: Session = {
 		id: row.id,
-		secretHash: row.secret_hash,
+		secretHash: new Uint8Array(row.secret_hash),
 		createdAt: new Date(row.created_at * 1000), // Convert s to ms
 		userId: row.user_id,
 	};
