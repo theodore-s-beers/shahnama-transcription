@@ -61,7 +61,7 @@ export const GET: RequestHandler = async ({ cookies, platform, url }) => {
 		});
 	} catch (err) {
 		if (err instanceof OAuth2RequestError) {
-			return new Response(null, { status: 400 }); // Invalid code
+			return new Response(null, { status: 400 });
 		}
 
 		if (err instanceof Error) {
