@@ -41,6 +41,9 @@ export const GET: RequestHandler = async ({ cookies, platform, url }) => {
 
 		const sessionWithToken = await createSession(platform!.env.DB, userId);
 
+		// Does this even work?
+		cookies.set("test_cookie", "hello_world", { path: "/" });
+
 		// Minimal options, for debugging
 		cookies.set(SESSION_COOKIE_NAME, sessionWithToken.token, { path: "/" });
 
