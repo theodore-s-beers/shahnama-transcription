@@ -11,6 +11,7 @@
 		type Line,
 	} from "$lib/utils";
 	import type { PageProps } from "./$types";
+	import { resolve } from "$app/paths";
 
 	const volNumber = $derived(parseInt(page.params.vol!));
 	const pgNumber = $derived(parseInt(page.params.pg!));
@@ -96,8 +97,8 @@
 	}
 
 	afterNavigate(async () => {
-		if (volNumber < 1 || volNumber > 8) return goto("/");
-		if (pgNumber < 3 || pgNumber > maxPages[volNumber]) return goto("/");
+		if (volNumber < 1 || volNumber > 8) return goto(resolve("/"));
+		if (pgNumber < 3 || pgNumber > maxPages[volNumber]) return goto(resolve("/"));
 
 		try {
 			const params = new URLSearchParams({
@@ -169,24 +170,28 @@
 <div class="mx-auto p-4 pb-6 text-lg">
 	<div class="mb-3 flex">
 		<div class="mx-auto flex gap-8">
-			<a href={`/${prevVol}/${prevPg}`} class="text-blue-800 hover:underline">Prev. pg.</a>
-			<a href={`/${nextVol}/${nextPg}`} class="text-blue-800 hover:underline">Next pg.</a>
+			<a href={resolve(`/${prevVol}/${prevPg}`)} class="text-blue-800 hover:underline">Prev. pg.</a>
+			<a href={resolve(`/${nextVol}/${nextPg}`)} class="text-blue-800 hover:underline">Next pg.</a>
 		</div>
 
 		<div class="mr-8">
-			<a href="/" class="text-blue-800 hover:underline">Home</a>
+			<a href={resolve("/")} class="text-blue-800 hover:underline">Home</a>
 		</div>
 
 		{#if committer}
 			<div>
-				Signed in: <a href="/account" class="text-green-700 hover:underline">{data.shortName}</a>
+				Signed in: <a href={resolve("/account")} class="text-green-700 hover:underline">
+					{data.shortName}
+				</a>
 			</div>
 		{:else if data.username}
 			<div>
-				Signed in: <a href="/logout" class="text-green-700 hover:underline">{data.username}</a>
+				Signed in: <a href={resolve("/logout")} class="text-green-700 hover:underline">
+					{data.username}
+				</a>
 			</div>
 		{:else}
-			<div><a href="/login" class="text-blue-800 hover:underline">Sign in</a></div>
+			<div><a href={resolve("/login")} class="text-blue-800 hover:underline">Sign in</a></div>
 		{/if}
 	</div>
 

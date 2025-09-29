@@ -2,6 +2,7 @@
 	import { onMount } from "svelte";
 	import type { PageProps } from "./$types";
 	import type { PageNumber } from "$lib/utils";
+	import { resolve } from "$app/paths";
 
 	let { data }: PageProps = $props();
 	const shortName = data.shortName;
@@ -26,8 +27,8 @@
 
 <div class="mx-auto max-w-7xl p-4 pb-8 text-lg">
 	<div class="mb-3 flex justify-end">
-		<div class="mr-8"><a href="/" class="text-blue-800 hover:underline">Home</a></div>
-		<div><a href="/logout" class="text-blue-800 hover:underline">Sign out</a></div>
+		<div class="mr-8"><a href={resolve("/")} class="text-blue-800 hover:underline">Home</a></div>
+		<div><a href={resolve("/logout")} class="text-blue-800 hover:underline">Sign out</a></div>
 	</div>
 
 	<div class="mb-6 text-4xl">User Account: <span class="text-green-700">{shortName}</span></div>
@@ -37,7 +38,9 @@
 	<ul class="list-inside list-disc">
 		{#each myPages as { vol, pg } (`${vol}-${pg}`)}
 			<li>
-				<a href={`/${vol}/${pg}`} class="text-blue-800 hover:underline">vol. {vol}, pg. {pg}</a>
+				<a href={resolve(`/${vol}/${pg}`)} class="text-blue-800 hover:underline">
+					vol. {vol}, pg. {pg}
+				</a>
 			</li>
 		{/each}
 	</ul>
