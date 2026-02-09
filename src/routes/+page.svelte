@@ -10,7 +10,7 @@
 	let linkAddress = $derived(validSelection(vol, pg) ? `/${vol}/${pg}/` : "/");
 
 	let { data }: PageProps = $props();
-	const committer = typeof data.shortName === "string" && data.shortName.length > 0;
+	const committer = $derived(typeof data.shortName === "string" && data.shortName.length > 0);
 </script>
 
 <svelte:head>

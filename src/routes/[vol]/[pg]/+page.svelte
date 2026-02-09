@@ -26,7 +26,7 @@
 	let savedLines = $state(false);
 
 	const { data }: PageProps = $props();
-	const committer = typeof data.shortName === "string" && data.shortName.length > 0;
+	const committer = $derived(typeof data.shortName === "string" && data.shortName.length > 0);
 
 	function confirmLineCount() {
 		if (lineCount < 1 || lineCount > 25) return;

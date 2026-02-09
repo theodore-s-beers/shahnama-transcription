@@ -5,7 +5,7 @@
 	import { resolve } from "$app/paths";
 
 	let { data }: PageProps = $props();
-	const shortName = data.shortName;
+	const shortName = $derived(data.shortName);
 
 	let myPages: PageNumber[] = $state([]);
 
