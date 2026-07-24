@@ -317,9 +317,9 @@
 									<input
 										id={`line-number-${line.numberWithinPage}`}
 										type="number"
-										class="w-20 rounded border border-black p-2 font-sans text-lg invalid:bg-red-100"
+										class="w-22 rounded border border-black p-2 font-sans text-lg invalid:bg-red-100"
 										min="5"
-										max="995"
+										max="2000"
 										step="5"
 										dir="ltr"
 										bind:value={line.numberListed}
