@@ -86,7 +86,7 @@ export const GET: RequestHandler = async ({ platform, request }) => {
 			AND volume_number BETWEEN ? AND ?
 			AND page_number BETWEEN ? AND ?
 		ORDER BY volume_number, page_number, number_within_page
-		LIMIT 1024;
+		LIMIT 1152;
 	`;
 
 	const lineStmt = db.prepare(lineSql).bind(editor, startVol, endVol, startPg, endPg);
