@@ -1,11 +1,11 @@
 name = "shahnama-transcription"
-compatibility_date = "2026-04-06"
+compatibility_date = "2026-07-24"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = ".svelte-kit/cloudflare"
 
 [vars]
-NODE_VERSION = "24"
-PNPM_VERSION = "10"
+NODE_VERSION = "24.18"
+PNPM_VERSION = "11"
 
 [[d1_databases]]
 binding = "DB"
