@@ -58,3 +58,9 @@ CREATE TABLE line_simplified (
 CREATE INDEX idx_editor ON line_simplified(editor);
 CREATE INDEX idx_volume_number ON line_simplified(volume_number);
 CREATE INDEX idx_page_number ON line_simplified(page_number);
+CREATE INDEX idx_editor_location ON line_simplified(
+    editor,
+    volume_number,
+    page_number,
+    number_within_page
+);
