@@ -7,7 +7,11 @@
 	let pg = $state(3);
 
 	let linkElement: HTMLAnchorElement;
-	let linkAddress = $derived(validSelection(vol, pg) ? `/${vol}/${pg}/` : "/");
+	let linkAddress = $derived(
+		validSelection(vol, pg)
+			? resolve("/[vol]/[pg]", { vol: String(vol), pg: String(pg) })
+			: resolve("/"),
+	);
 
 	let { data }: PageProps = $props();
 	const committer = $derived(typeof data.shortName === "string" && data.shortName.length > 0);
